@@ -10,7 +10,7 @@
         "configstore": "^7.0.0",
         "toml-eslint-parser": "^0.10.0",
         "turndown": "^7.2.0",
-        "zentao-api": "0.7.2",
+        "zentao-api": "0.8.0",
         "zod": "^4.3.6",
       },
       "devDependencies": {
@@ -239,7 +239,7 @@
 
     "xdg-basedir": ["xdg-basedir@5.1.0", "", {}, "sha512-GCPAHLvrIH13+c0SuacwvRYj2SxJXQ4kaVTT5xgL3kPrz56XxkF21IGhjSE1+W0aw7gpBWRGXLCPnPby6lSpmQ=="],
 
-    "zentao-api": ["zentao-api@0.7.2", "", {}, "sha512-1/2A4BWVOvtT2XvyiUGPr+5vkzi3aMIeVL3FFxAvAr0QBmQuZb0Aszm6CYc7Yb5Bge8mDKfbB+kjy/LQHDuXpw=="],
+    "zentao-api": ["zentao-api@0.8.0", "", {}, "sha512-waaGXfa6kcNrqD3a5YfzXZOrBT29aifPptqheP2ujNkfu43wgamXZ5UCT/vlIaK4hpqSrta9GlPBUzZi8wdBlg=="],
 
     "zod": ["zod@4.3.6", "", {}, "sha512-rftlrkhHZOcjDwkGlnUtZZkvaPHCsDATp4pGpuOOMDaTdDDXF91wuVDJoWoPsKX/3YPQ5fHuF3STjcYyKr+Qhg=="],
 

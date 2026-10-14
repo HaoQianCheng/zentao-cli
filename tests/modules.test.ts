@@ -46,7 +46,10 @@ describe('module registry (zentao-api)', () => {
 
     test('only modules without SDK property metadata have empty definitions', () => {
         const missing = getModuleNames().filter(name => Object.keys(getObjectProps(name)).length === 0);
-        expect(missing.sort()).toEqual(['db', 'knowledge', 'knowledgelib']);
+        expect(missing.sort()).toEqual([
+            'auditplan', 'baseline', 'change', 'db', 'deliverable', 'knowledge', 'knowledgelib', 'nc',
+            'opportunity', 'process', 'relation', 'repo', 'resourcecalendar', 'space', 'weekly', 'workflowgroup',
+        ]);
     });
 
     test('isModuleName identifies valid modules', () => {

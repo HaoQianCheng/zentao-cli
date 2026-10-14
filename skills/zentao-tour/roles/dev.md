@@ -7,7 +7,7 @@
 已知账号时直接查询，无需再跑一次 profile。先用 `zentao my tasks --help` 看最低版本，然后：
 
 ```bash
-zentao my tasks --browseType=assignedtome --pick=id,name,status,estimate,consumed,left --page=1 --recPerPage=20
+zentao my tasks --browseType=assignedTo --pick=id,name,status,estimate,consumed,left --page=1 --recPerPage=20
 ```
 
 这条入口不用先找执行 ID。让用户挑一条感兴趣的任务，再看 `zentao task <id>`。只查了第一页时说“这一页有这些任务”，不要断言“只有这些”或“没有任务”。需要找某条或确认没有时继续翻页。
@@ -46,7 +46,7 @@ zentao task finish <id> --currentConsumed=<本次小时> --realStarted="<YYYY-MM
 ## 再看我的 Bug
 
 ```bash
-zentao my bugs --browseType=assignedtome --pick=id,title,status,severity,pri --page=1 --recPerPage=20
+zentao my bugs --browseType=assignedTo --pick=id,title,status,severity,pri --page=1 --recPerPage=20
 ```
 
 挑一条后读取 `zentao bug <id>`，先了解现象、重现条件和修复情况。E2010 时在用户指定产品里分页查询，再按实际 `assignedTo` 结构筛选账号：

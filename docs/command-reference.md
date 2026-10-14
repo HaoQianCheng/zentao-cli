@@ -165,7 +165,7 @@ zentao file create --file=/path/to/screenshot.png --objectType=bug --objectID=42
 
 文档的 `contentType=doc` 将 Markdown 正文转换为协作文档内容，`contentType=html` 保存旧格式 HTML。附件上传的 `file` 是本地文件路径，默认大小上限为 50 MiB。
 
-### 数据库与知识库（SDK 0.7.2）
+### 数据库与知识库（SDK 0.8.0）
 
 ```bash
 zentao db tables
@@ -178,9 +178,9 @@ zentao knowledge embeddingsSearch --data '{"keyword":"如何处理接口请求�
 zentao knowledge get --knowledgeID=42
 ```
 
-数据库操作要求 22.7 / biz13.7 / max8.7 / ipd5.7 或更新版本。知识库与知识操作要求商业知识库扩展及 biz13.7 / max8.7 / ipd5.7 或更新版本；搜索还需 `ai.searchknowledgelib` 权限。上述表名和 ID 仅为示例，访问仍受服务端权限控制。
+数据库、知识库与知识操作要求 22.7 / biz13.7 / max8.7 / ipd5.7 或更新版本。知识库接口的实际可用性取决于服务端知识库功能与权限；搜索还需 `ai.searchknowledgelib` 权限。上述表名和 ID 仅为示例，访问仍受服务端权限控制。
 
-`knowledge search` 是对标题或已保存正文的关键词匹配：`any` 表示任一关键词命中，`all` 表示全部关键词命中同一条知识，可以分别命中标题与正文。它与本地当前页的 `--search` 不同。`embeddingsSearch` 只检索已有索引，按匹配度返回片段且不分页；读取完整正文使用结果中的 `knowledgeID`，不能使用 `chunkID` 或来源对象 ID。三个新增模块目前没有 `props` 字段元数据，需查看具体操作帮助。
+`knowledge search` 是对标题或已保存正文的关键词匹配：`any` 表示任一关键词命中，`all` 表示全部关键词命中同一条知识，可以分别命中标题与正文。它与本地当前页的 `--search` 不同。`embeddingsSearch` 只检索已有索引，按匹配度返回片段且不分页；读取完整正文使用结果中的 `knowledgeID`，不能使用 `chunkID` 或来源对象 ID。这三个模块目前没有 `props` 字段元数据，需查看具体操作帮助。
 
 <a id="errors"></a>
 
@@ -341,7 +341,7 @@ bun run scripts/generate-command-reference.ts --check
 
 ## 覆盖范围
 
-对应当前工作区：CLI **0.3.1**，API 定义 **0.7.2**；覆盖 **17 个内置一级命令**（另含 config get/set）、**29 个业务模块、237 个业务操作**。已安装版本不同时，请以本机命令的 --help 为准。
+对应当前工作区：CLI **0.3.1**，API 定义 **0.8.0**；覆盖 **17 个内置一级命令**（另含 config get/set）、**42 个业务模块、360 个业务操作**。已安装版本不同时，请以本机命令的 --help 为准。
 
 <a id="global-options"></a>
 
@@ -1009,9 +1009,9 @@ zentao upgrade --yes
 | --- | --- | --- | --- |
 | [user](#module-user) | 用户 | — | 5 |
 | [program](#module-program) | 项目集 | — | 5 |
-| [product](#module-product) | 产品 | — | 10 |
-| [project](#module-project) | 项目 | — | 12 |
-| [execution](#module-execution) | 执行 | — | 11 |
+| [product](#module-product) | 产品 | — | 11 |
+| [project](#module-project) | 项目 | — | 14 |
+| [execution](#module-execution) | 执行 | — | 12 |
 | [productplan](#module-productplan) | 产品计划 | plan | 5 |
 | [story](#module-story) | 需求 | — | 12 |
 | [epic](#module-epic) | 业务需求 | — | 8 |
@@ -1029,13 +1029,26 @@ zentao upgrade --yes
 | [testtask](#module-testtask) | 测试单 | — | 4 |
 | [release](#module-release) | 发布 | — | 4 |
 | [file](#module-file) | 附件 | — | 3 |
-| [workflow](#module-workflow) | 工作流 | — | 5 |
+| [workflow](#module-workflow) | 工作流 | — | 55 |
 | [doc](#module-doc) | 文档 | — | 41 |
-| [todo](#module-todo) | 待办 | — | 3 |
-| [my](#module-my) | 地盘 | — | 14 |
+| [todo](#module-todo) | 待办 | — | 4 |
+| [my](#module-my) | 地盘 | — | 32 |
+| [process](#module-process) | 过程裁剪 | — | 3 |
+| [auditplan](#module-auditplan) | 质量保证计划 | — | 7 |
+| [nc](#module-nc) | 不符合项 | — | 6 |
+| [opportunity](#module-opportunity) | 机会 | — | 6 |
+| [deliverable](#module-deliverable) | 交付物 | — | 4 |
+| [baseline](#module-baseline) | 基线 | — | 5 |
+| [change](#module-change) | 项目变更 | — | 5 |
+| [relation](#module-relation) | 对象关联 | — | 4 |
+| [workflowgroup](#module-workflowgroup) | 项目流程 | — | 1 |
+| [resourcecalendar](#module-resourcecalendar) | 人力资源日历 | — | 1 |
+| [weekly](#module-weekly) | 项目周报 | — | 5 |
 | [db](#module-db) | 数据库 | — | 3 |
 | [knowledgelib](#module-knowledgelib) | 知识库 | — | 1 |
 | [knowledge](#module-knowledge) | 知识 | — | 4 |
+| [space](#module-space) | 代码库空间 | — | 1 |
+| [repo](#module-repo) | 代码库 | — | 2 |
 
 <a id="module-user"></a>
 
@@ -1316,6 +1329,7 @@ zentao help product
 | [get](#action-product-get) | 获取产品详情 |
 | [update](#action-product-update) | 修改产品 |
 | [delete](#action-product-delete) | 删除产品 |
+| [repos](#action-product-repos) | 获取产品关联的代码库列表 |
 
 <a id="action-product-list"></a>
 
@@ -1528,11 +1542,31 @@ zentao product delete --productID=<number> [选项]
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
 
+<a id="action-product-repos"></a>
+
+#### `zentao product repos` · 获取产品关联的代码库列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+需部署代码库 API 2.0 实现，具备 repo.browse 权限及产品访问权限。仅返回未删除、非导入中且当前用户可访问的代码库，不分页、不保证排序；url.http、url.ssh 可能缺省。产品不存在、已删除或不可访问时为业务失败。
+
+```text
+zentao product repos --productID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--productID` | 路径 | `number` | 是 | 未声明 | 产品 ID，正整数 |
+
+`--productID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
 <a id="module-project"></a>
 
 ### project · 项目
 
-项目管理，支持获取项目列表、获取项目集的项目列表、获取项目团队列表、获取项目成员列表、创建项目、关闭项目、创建项目需求、创建项目Bug、创建项目任务、修改项目、删除项目、维护项目成员
+项目管理，支持获取项目列表、获取项目集的项目列表、获取项目团队列表、获取项目成员列表、创建项目、关闭项目、创建项目需求、创建项目Bug、创建项目任务、创建项目风险、项目关联需求、修改项目、删除项目、维护项目成员
 
 快捷用法与字段查询：
 
@@ -1553,6 +1587,8 @@ zentao help project
 | [createStory](#action-project-createstory) | 创建项目需求 |
 | [createBug](#action-project-createbug) | 创建项目Bug |
 | [createTask](#action-project-createtask) | 创建项目任务 |
+| [createRisk](#action-project-createrisk) | 创建项目风险 |
+| [linkStories](#action-project-linkstories) | 项目关联需求 |
 | [update](#action-project-update) | 修改项目 |
 | [delete](#action-project-delete) | 删除项目 |
 | [members](#action-project-members) | 维护项目成员 |
@@ -1573,7 +1609,7 @@ zentao project list [选项]
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；name_asc（名称 升序）；name_desc（名称 降序）；begin_asc（计划开始 升序）；begin_desc（计划开始 降序）；end_asc（计划结束 升序）；end_desc（计划结束 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
-| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：name(项目名称，示例：关键字)；code(项目代号，示例：关键字)；id(项目ID，示例：1)；model(项目管理方式，枚举：scrum Scrum \| waterfall 瀑布 \| kanban 看板 \| agileplus 融合敏捷 \| waterfallplus 融合瀑布)；hasProduct(项目类型，枚举：1 产品型 \| 0 项目型)；parent(所属项目集，示例：all)；status(状态，枚举：wait 未开始 \| doing 进行中 \| suspended 已挂起 \| closed 已关闭 \| delay 已延期)；desc(项目描述，示例：关键字)；PM(负责人，用户，示例：admin)；openedDate(创建日期，示例：2026-01-01)；begin(计划开始，示例：2026-01-01)；end(计划完成，示例：2026-01-01)；realBegan(实际开始，示例：2026-01-01)；realEnd(实际完成，示例：2026-01-01)；openedBy(由谁创建，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedDate(最后编辑日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01) |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：name(项目名称，示例：关键字)；code(项目代号，示例：关键字)；id(项目ID，示例：1)；model(项目管理方式，枚举：scrum Scrum \| waterfall 瀑布 \| kanban 看板 \| agileplus 融合敏捷 \| waterfallplus 融合瀑布)；hasProduct(项目类型，枚举：1 产品型 \| 0 项目型)；parent(所属项目集，示例：all)；status(状态，枚举：wait 未开始 \| doing 进行中 \| suspended 已挂起 \| closed 已关闭 \| delay 已延期)；desc(项目描述，示例：关键字)；PM(负责人，用户，示例：admin)；teamCount(人数，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；begin(计划开始，示例：2026-01-01)；end(计划完成，示例：2026-01-01)；realBegan(实际开始，示例：2026-01-01)；realEnd(实际完成，示例：2026-01-01)；openedBy(由谁创建，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedDate(最后编辑日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01) |
 | `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
@@ -1755,6 +1791,58 @@ zentao project createTask --projectID=<number> --name=<string> [选项]
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
 
+<a id="action-project-createrisk"></a>
+
+#### `zentao project createRisk` · 创建项目风险
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao project createRisk --projectID=<number> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 风险名称。 |
+| `--source` | 请求体 | `string` | 否 | 未声明 | 风险来源。 |
+| `--execution` | 请求体 | `number` | 否 | 未声明 | 所属执行 ID，项目级风险传 0。<br>格式：int32<br>必须为整数 |
+| `--category` | 请求体 | `string` | 否 | 未声明 | 风险类型。 |
+| `--strategy` | 请求体 | `string` | 否 | 未声明 | 应对策略。 |
+| `--impact` | 请求体 | `number` | 否 | 未声明 | 影响程度，1-5。<br>格式：int32<br>必须为整数 |
+| `--probability` | 请求体 | `number` | 否 | 未声明 | 发生概率，1-5。<br>格式：int32<br>必须为整数 |
+| `--rate` | 请求体 | `number` | 否 | 未声明 | 风险系数，通常为 impact * probability。<br>格式：int32<br>必须为整数 |
+| `--pri` | 请求体 | `number` | 否 | 未声明 | 优先级，1 高、2 中、3 低。<br>格式：int32<br>必须为整数 |
+| `--identifiedDate` | 请求体 | `string` | 否 | 未声明 | 识别日期。 |
+| `--plannedClosedDate` | 请求体 | `string` | 否 | 未声明 | 计划关闭日期。 |
+| `--assignedTo` | 请求体 | `string` | 否 | 未声明 | 指派人账号。 |
+| `--prevention` | 请求体 | `string` | 否 | 未声明 | 应对措施。 |
+| `--remedy` | 请求体 | `string` | 否 | 未声明 | 响应措施。 |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-project-linkstories"></a>
+
+#### `zentao project linkStories` · 项目关联需求
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao project linkStories --projectID=<number> --stories=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--stories` | 请求体 | `string[]` | 是 | 未声明 | 要关联到项目的需求 ID 列表。<br>数组元素类型：string |
+| `--storyType` | 请求体 | `string` | 否 | 未声明 | 需求类型，默认 story；可按项目需求类型传 requirement、epic 等。 |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
 <a id="action-project-update"></a>
 
 #### `zentao project update` · 修改项目
@@ -1828,7 +1916,7 @@ zentao project members --projectID=<number> --account=<string[]> [选项]
 
 ### execution · 执行
 
-执行管理，支持获取执行列表、获取项目的执行列表、获取执行团队列表、获取执行成员列表、创建执行（迭代/阶段/看板）、关闭执行、创建执行的任务模块、获取执行详情、修改执行、删除执行、维护执行成员
+执行管理，支持获取执行列表、获取项目的执行列表、获取执行团队列表、获取执行成员列表、创建执行（迭代/阶段/看板）、关闭执行、创建执行的任务模块、执行关联需求、获取执行详情、修改执行、删除执行、维护执行成员
 
 快捷用法与字段查询：
 
@@ -1848,6 +1936,7 @@ zentao help execution
 | [create](#action-execution-create) | 创建执行（迭代/阶段/看板） |
 | [close](#action-execution-close) | 关闭执行 |
 | [createTaskModule](#action-execution-createtaskmodule) | 创建执行的任务模块 |
+| [linkStories](#action-execution-linkstories) | 执行关联需求 |
 | [get](#action-execution-get) | 获取执行详情 |
 | [update](#action-execution-update) | 修改执行 |
 | [delete](#action-execution-delete) | 删除执行 |
@@ -1997,6 +2086,26 @@ zentao execution createTaskModule --executionID=<number> [选项]
 | `--executionID` | 路径 | `number` | 是 | 未声明 | 执行ID |
 | `--name` | 请求体 | `string` | 否 | 未声明 | 模块名称 |
 | `--parentID` | 请求体 | `number` | 否 | 未声明 | 父模块<br>格式：int32<br>必须为整数 |
+
+`--executionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-execution-linkstories"></a>
+
+#### `zentao execution linkStories` · 执行关联需求
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao execution linkStories --executionID=<number> --stories=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--executionID` | 路径 | `number` | 是 | 未声明 | 执行ID |
+| `--stories` | 请求体 | `string[]` | 是 | 未声明 | 要关联到执行的需求 ID 列表。<br>数组元素类型：string |
+| `--storyType` | 请求体 | `string` | 否 | 未声明 | 需求类型，默认 story。 |
 
 `--executionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
 
@@ -2275,7 +2384,7 @@ zentao story list --project=<id> [选项]
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
-| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
 | `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
@@ -2552,7 +2661,7 @@ zentao epic list --productID=<number> [选项]
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
-| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
 | `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
 
 `--productID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
@@ -2755,7 +2864,7 @@ zentao requirement list --productID=<number> [选项]
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
-| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
 | `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
 
 `--productID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
@@ -5252,7 +5361,7 @@ zentao file delete --fileID=<number> [选项]
 
 ### workflow · 工作流
 
-工作流管理，支持获取工作流数据列表(以合同为例)、获取工作流数据详情(以合同为例)、创建工作流数据(以合同为例)、修改工作流数据(以合同为例)、删除工作流事项(以合同为例)
+工作流管理，支持获取工作流数据列表(以合同为例)、获取工作流数据详情(以合同为例)、获取工作流列表、获取工作流字段列表、获取工作流动作列表、获取工作流标签列表、获取工作流数据表列表、获取数据源列表、获取规则列表、创建工作流数据(以合同为例)、创建工作流、复制工作流、创建工作流字段、创建工作流动作、创建工作流标签、创建工作流数据表、创建数据源、创建规则、获取工作流详情、获取工作流字段详情、获取工作流动作详情、获取工作流标签详情、获取工作流数据表详情、获取数据源详情、获取规则详情、修改工作流数据(以合同为例)、修改工作流、修改工作流字段、修改工作流动作、修改工作流标签、修改工作流数据表、修改数据源、修改规则、删除工作流事项(以合同为例)、删除工作流、删除工作流字段、删除工作流动作、删除工作流标签、删除工作流数据表、删除数据源、删除规则、启用工作流、停用工作流、发布工作流、设置工作流审批、设置动作CSS、设置工作流CSS、设置字段导出、设置工作流全文检索、设置动作JS、设置工作流JS、设置动作通知、设置字段搜索、设置字段取值、设置动作验证
 
 快捷用法与字段查询：
 
@@ -5266,9 +5375,59 @@ zentao help workflow
 | --- | --- |
 | [list](#action-workflow-list) | 获取工作流数据列表(以合同为例) |
 | [getContract](#action-workflow-getcontract) | 获取工作流数据详情(以合同为例) |
+| [flows](#action-workflow-flows) | 获取工作流列表 |
+| [fields](#action-workflow-fields) | 获取工作流字段列表 |
+| [actions](#action-workflow-actions) | 获取工作流动作列表 |
+| [labels](#action-workflow-labels) | 获取工作流标签列表 |
+| [tables](#action-workflow-tables) | 获取工作流数据表列表 |
+| [datasources](#action-workflow-datasources) | 获取数据源列表 |
+| [rules](#action-workflow-rules) | 获取规则列表 |
 | [create](#action-workflow-create) | 创建工作流数据(以合同为例) |
+| [createFlow](#action-workflow-createflow) | 创建工作流 |
+| [copyFlow](#action-workflow-copyflow) | 复制工作流 |
+| [createField](#action-workflow-createfield) | 创建工作流字段 |
+| [createAction](#action-workflow-createaction) | 创建工作流动作 |
+| [createLabel](#action-workflow-createlabel) | 创建工作流标签 |
+| [createTable](#action-workflow-createtable) | 创建工作流数据表 |
+| [createDatasource](#action-workflow-createdatasource) | 创建数据源 |
+| [createRule](#action-workflow-createrule) | 创建规则 |
+| [getFlow](#action-workflow-getflow) | 获取工作流详情 |
+| [getField](#action-workflow-getfield) | 获取工作流字段详情 |
+| [getAction](#action-workflow-getaction) | 获取工作流动作详情 |
+| [getLabel](#action-workflow-getlabel) | 获取工作流标签详情 |
+| [getTable](#action-workflow-gettable) | 获取工作流数据表详情 |
+| [getDatasource](#action-workflow-getdatasource) | 获取数据源详情 |
+| [getRule](#action-workflow-getrule) | 获取规则详情 |
 | [update](#action-workflow-update) | 修改工作流数据(以合同为例) |
+| [updateFlow](#action-workflow-updateflow) | 修改工作流 |
+| [updateField](#action-workflow-updatefield) | 修改工作流字段 |
+| [updateAction](#action-workflow-updateaction) | 修改工作流动作 |
+| [updateLabel](#action-workflow-updatelabel) | 修改工作流标签 |
+| [updateTable](#action-workflow-updatetable) | 修改工作流数据表 |
+| [updateDatasource](#action-workflow-updatedatasource) | 修改数据源 |
+| [updateRule](#action-workflow-updaterule) | 修改规则 |
 | [delete](#action-workflow-delete) | 删除工作流事项(以合同为例) |
+| [deleteFlow](#action-workflow-deleteflow) | 删除工作流 |
+| [deleteField](#action-workflow-deletefield) | 删除工作流字段 |
+| [deleteAction](#action-workflow-deleteaction) | 删除工作流动作 |
+| [deleteLabel](#action-workflow-deletelabel) | 删除工作流标签 |
+| [deleteTable](#action-workflow-deletetable) | 删除工作流数据表 |
+| [deleteDatasource](#action-workflow-deletedatasource) | 删除数据源 |
+| [deleteRule](#action-workflow-deleterule) | 删除规则 |
+| [activateFlow](#action-workflow-activateflow) | 启用工作流 |
+| [deactivateFlow](#action-workflow-deactivateflow) | 停用工作流 |
+| [releaseFlow](#action-workflow-releaseflow) | 发布工作流 |
+| [setApproval](#action-workflow-setapproval) | 设置工作流审批 |
+| [setActionCSS](#action-workflow-setactioncss) | 设置动作CSS |
+| [setFlowCSS](#action-workflow-setflowcss) | 设置工作流CSS |
+| [setExport](#action-workflow-setexport) | 设置字段导出 |
+| [setFulltextSearch](#action-workflow-setfulltextsearch) | 设置工作流全文检索 |
+| [setActionJS](#action-workflow-setactionjs) | 设置动作JS |
+| [setFlowJS](#action-workflow-setflowjs) | 设置工作流JS |
+| [setActionNotice](#action-workflow-setactionnotice) | 设置动作通知 |
+| [setSearch](#action-workflow-setsearch) | 设置字段搜索 |
+| [setValue](#action-workflow-setvalue) | 设置字段取值 |
+| [setActionVerification](#action-workflow-setactionverification) | 设置动作验证 |
 
 <a id="action-workflow-list"></a>
 
@@ -5298,6 +5457,121 @@ zentao workflow getContract [选项]
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
 
+<a id="action-workflow-flows"></a>
+
+#### `zentao workflow flows` · 获取工作流列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow flows [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--status` | 查询 | `string` | 否 | 未声明 | 工作流状态<br>可选值：normal（正常）；wait（待发布）；pause（已停用） |
+| `--app` | 查询 | `string` | 否 | 未声明 | 所属应用，不传时不限。 |
+| `--onlyCustom` | 查询 | `number` | 否 | 未声明 | 是否只显示自定义工作流<br>可选值：0（全部）；1（仅自定义） |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
+| `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
+| `--pageID` | 查询 | `number` | 否 | `"1"` | 页码，默认 1。<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：app,createdBy,createdDate,desc,id,name |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-fields"></a>
+
+#### `zentao workflow fields` · 获取工作流字段列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow fields --module=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-actions"></a>
+
+#### `zentao workflow actions` · 获取工作流动作列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow actions --module=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-labels"></a>
+
+#### `zentao workflow labels` · 获取工作流标签列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow labels --module=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-tables"></a>
+
+#### `zentao workflow tables` · 获取工作流数据表列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow tables --module=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-datasources"></a>
+
+#### `zentao workflow datasources` · 获取数据源列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow datasources [选项]
+```
+
+此操作没有业务参数。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-rules"></a>
+
+#### `zentao workflow rules` · 获取规则列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow rules [选项]
+```
+
+此操作没有业务参数。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
 <a id="action-workflow-create"></a>
 
 #### `zentao workflow create` · 创建工作流数据(以合同为例)
@@ -5313,6 +5587,294 @@ zentao workflow create --name=<string> [选项]
 | `--name` | 请求体 | `string` | 是 | 未声明 | 合同名称 |
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-createflow"></a>
+
+#### `zentao workflow createFlow` · 创建工作流
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow createFlow --module=<string> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 请求体 | `string` | 是 | 未声明 | 工作流代号，只能包含英文字母。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 工作流名称。 |
+| `--navigator` | 请求体 | `string` | 否 | 未声明 | 所属导航(primary 主导航 \| secondary 二级导航)。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-copyflow"></a>
+
+#### `zentao workflow copyFlow` · 复制工作流
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow copyFlow --flowID=<number> --module=<string> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+| `--module` | 请求体 | `string` | 是 | 未声明 | 新工作流代号，只能包含英文字母。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 新工作流名称。 |
+| `--navigator` | 请求体 | `string` | 否 | 未声明 | 所属导航(primary 主导航 \| secondary 二级导航)。 |
+| `--position` | 请求体 | `string` | 否 | 未声明 | 菜单位置。 |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-createfield"></a>
+
+#### `zentao workflow createField` · 创建工作流字段
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow createField --module=<string> --name=<string> --field=<string> --control=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 字段名称。 |
+| `--field` | 请求体 | `string` | 是 | 未声明 | 字段代号，只能包含英文字母。 |
+| `--control` | 请求体 | `string` | 是 | 未声明 | 控件类型(input 单行文本 \| textarea 多行文本 \| select 下拉 \| date 日期 \| datetime 日期时间 \| richtext 富文本 \| checkbox 复选框 \| multi-select 多选 \| formula 公式)。 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 字段类型(varchar 字符 \| int 整数 \| float 浮点数 \| date 日期 \| datetime 日期时间 \| text 文本)。 |
+| `--length` | 请求体 | `string` | 否 | 未声明 | 字段长度。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-createaction"></a>
+
+#### `zentao workflow createAction` · 创建工作流动作
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow createAction --module=<string> --module=<string> --action=<string> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--module` | 请求体 | `string` | 是 | 未声明 | 工作流代号。 |
+| `--action` | 请求体 | `string` | 是 | 未声明 | 动作代号，只能包含小写英文字母。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 动作名称。 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 动作类型(single 单条操作 \| batch 批量操作)。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-createlabel"></a>
+
+#### `zentao workflow createLabel` · 创建工作流标签
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow createLabel --module=<string> --module=<string> --action=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--module` | 请求体 | `string` | 是 | 未声明 | 工作流代号。 |
+| `--action` | 请求体 | `string` | 是 | 未声明 | 关联动作代号。 |
+| `--code` | 请求体 | `string` | 否 | 未声明 | 标签代号。 |
+| `--label` | 请求体 | `string` | 否 | 未声明 | 标签名称。 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 标签类型(data 数据标签 \| sql SQL标签)。 |
+| `--fields` | 请求体 | `string[]` | 否 | 未声明 | 数据标签的字段列表。<br>数组元素类型：string |
+| `--operators` | 请求体 | `string[]` | 否 | 未声明 | 数据标签的运算符列表。<br>数组元素类型：string |
+| `--values` | 请求体 | `string[]` | 否 | 未声明 | 数据标签的条件值列表。<br>数组元素类型：string |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-createtable"></a>
+
+#### `zentao workflow createTable` · 创建工作流数据表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow createTable --module=<string> --module=<string> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--module` | 请求体 | `string` | 是 | 未声明 | 数据表代号，只能包含英文字母。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 数据表名称。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-createdatasource"></a>
+
+#### `zentao workflow createDatasource` · 创建数据源
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow createDatasource --type=<string> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--type` | 请求体 | `string` | 是 | 未声明 | 数据源类型(sql SQL查询 \| system 系统方法 \| option 选项 \| lang 语言项 \| category 分类 \| func 函数)。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 数据源名称。 |
+| `--code` | 请求体 | `string` | 否 | 未声明 | 数据源代码。 |
+| `--sql` | 请求体 | `string` | 否 | 未声明 | SQL 语句，type=sql 时必填，支持 SELECT 查询。 |
+| `--keyField` | 请求体 | `string` | 否 | 未声明 | 键字段，type=sql 时必填。 |
+| `--valueField` | 请求体 | `string` | 否 | 未声明 | 值字段，type=sql 时必填。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-createrule"></a>
+
+#### `zentao workflow createRule` · 创建规则
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow createRule --type=<string> --name=<string> --rule=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--type` | 请求体 | `string` | 是 | 未声明 | 规则类型(regex 正则表达式)。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 规则名称。 |
+| `--rule` | 请求体 | `string` | 是 | 未声明 | 规则内容，正则表达式需要包含定界符。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-getflow"></a>
+
+#### `zentao workflow getFlow` · 获取工作流详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow getFlow --flowID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-getfield"></a>
+
+#### `zentao workflow getField` · 获取工作流字段详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow getField --fieldID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--fieldID` | 路径 | `number` | 是 | 未声明 | fieldID |
+
+`--fieldID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-getaction"></a>
+
+#### `zentao workflow getAction` · 获取工作流动作详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow getAction --actionID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--actionID` | 路径 | `number` | 是 | 未声明 | actionID |
+
+`--actionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-getlabel"></a>
+
+#### `zentao workflow getLabel` · 获取工作流标签详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow getLabel --labelID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--labelID` | 路径 | `number` | 是 | 未声明 | labelID |
+
+`--labelID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-gettable"></a>
+
+#### `zentao workflow getTable` · 获取工作流数据表详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow getTable --tableID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--tableID` | 路径 | `number` | 是 | 未声明 | tableID |
+
+`--tableID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-getdatasource"></a>
+
+#### `zentao workflow getDatasource` · 获取数据源详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow getDatasource --datasourceID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--datasourceID` | 路径 | `number` | 是 | 未声明 | datasourceID |
+
+`--datasourceID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-getrule"></a>
+
+#### `zentao workflow getRule` · 获取规则详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow getRule --ruleID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--ruleID` | 路径 | `number` | 是 | 未声明 | ruleID |
+
+`--ruleID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
 
 <a id="action-workflow-update"></a>
 
@@ -5335,6 +5897,169 @@ zentao workflow update --contractID=<number> --name=<string> [选项]
 
 未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
 
+<a id="action-workflow-updateflow"></a>
+
+#### `zentao workflow updateFlow` · 修改工作流
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow updateFlow --flowID=<number> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 工作流名称。 |
+| `--navigator` | 请求体 | `string` | 否 | 未声明 | 所属导航(primary 主导航 \| secondary 二级导航)。 |
+| `--position` | 请求体 | `string` | 否 | 未声明 | 菜单位置(before 之前 \| after 之后 \| 空 直接放在模块下)。 |
+| `--positionModule` | 请求体 | `string` | 否 | 未声明 | 位置模块，主导航下通常传 main；工作流发布后不能为空。 |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-workflow-updatefield"></a>
+
+#### `zentao workflow updateField` · 修改工作流字段
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow updateField --fieldID=<number> --name=<string> --control=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--fieldID` | 路径 | `number` | 是 | 未声明 | fieldID |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 字段名称。 |
+| `--control` | 请求体 | `string` | 是 | 未声明 | 控件类型。 |
+
+`--fieldID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-workflow-updateaction"></a>
+
+#### `zentao workflow updateAction` · 修改工作流动作
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow updateAction --actionID=<number> --action=<string> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--actionID` | 路径 | `number` | 是 | 未声明 | actionID |
+| `--action` | 请求体 | `string` | 是 | 未声明 | 动作代号。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 动作名称。 |
+
+`--actionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-workflow-updatelabel"></a>
+
+#### `zentao workflow updateLabel` · 修改工作流标签
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow updateLabel --labelID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--labelID` | 路径 | `number` | 是 | 未声明 | labelID |
+| `--label` | 请求体 | `string` | 否 | 未声明 | 标签名称。 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 标签类型。 |
+| `--fields` | 请求体 | `string[]` | 否 | 未声明 | 数据标签的字段列表。<br>数组元素类型：string |
+| `--operators` | 请求体 | `string[]` | 否 | 未声明 | 数据标签的运算符列表。<br>数组元素类型：string |
+| `--values` | 请求体 | `string[]` | 否 | 未声明 | 数据标签的条件值列表。<br>数组元素类型：string |
+
+`--labelID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-workflow-updatetable"></a>
+
+#### `zentao workflow updateTable` · 修改工作流数据表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow updateTable --tableID=<number> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--tableID` | 路径 | `number` | 是 | 未声明 | tableID |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 数据表名称。 |
+
+`--tableID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-workflow-updatedatasource"></a>
+
+#### `zentao workflow updateDatasource` · 修改数据源
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow updateDatasource --datasourceID=<number> --type=<string> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--datasourceID` | 路径 | `number` | 是 | 未声明 | datasourceID |
+| `--type` | 请求体 | `string` | 是 | 未声明 | 数据源类型。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 数据源名称。 |
+| `--code` | 请求体 | `string` | 否 | 未声明 | 数据源代码。 |
+| `--sql` | 请求体 | `string` | 否 | 未声明 | SQL 语句。 |
+| `--keyField` | 请求体 | `string` | 否 | 未声明 | 键字段。 |
+| `--valueField` | 请求体 | `string` | 否 | 未声明 | 值字段。 |
+
+`--datasourceID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-workflow-updaterule"></a>
+
+#### `zentao workflow updateRule` · 修改规则
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow updateRule --ruleID=<number> --type=<string> --name=<string> --rule=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--ruleID` | 路径 | `number` | 是 | 未声明 | ruleID |
+| `--type` | 请求体 | `string` | 是 | 未声明 | 规则类型。 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 规则名称。 |
+| `--rule` | 请求体 | `string` | 是 | 未声明 | 规则内容。 |
+
+`--ruleID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
 <a id="action-workflow-delete"></a>
 
 #### `zentao workflow delete` · 删除工作流事项(以合同为例)
@@ -5352,6 +6077,395 @@ zentao workflow delete --contractID=<number> [选项]
 `--contractID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deleteflow"></a>
+
+#### `zentao workflow deleteFlow` · 删除工作流
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deleteFlow --flowID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deletefield"></a>
+
+#### `zentao workflow deleteField` · 删除工作流字段
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deleteField --fieldID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--fieldID` | 路径 | `number` | 是 | 未声明 | fieldID |
+
+`--fieldID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deleteaction"></a>
+
+#### `zentao workflow deleteAction` · 删除工作流动作
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deleteAction --actionID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--actionID` | 路径 | `number` | 是 | 未声明 | actionID |
+
+`--actionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deletelabel"></a>
+
+#### `zentao workflow deleteLabel` · 删除工作流标签
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deleteLabel --labelID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--labelID` | 路径 | `number` | 是 | 未声明 | labelID |
+
+`--labelID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deletetable"></a>
+
+#### `zentao workflow deleteTable` · 删除工作流数据表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deleteTable --tableID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--tableID` | 路径 | `number` | 是 | 未声明 | tableID |
+
+`--tableID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deletedatasource"></a>
+
+#### `zentao workflow deleteDatasource` · 删除数据源
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deleteDatasource --datasourceID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--datasourceID` | 路径 | `number` | 是 | 未声明 | datasourceID |
+
+`--datasourceID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deleterule"></a>
+
+#### `zentao workflow deleteRule` · 删除规则
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deleteRule --ruleID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--ruleID` | 路径 | `number` | 是 | 未声明 | ruleID |
+
+`--ruleID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-activateflow"></a>
+
+#### `zentao workflow activateFlow` · 启用工作流
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow activateFlow --flowID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-deactivateflow"></a>
+
+#### `zentao workflow deactivateFlow` · 停用工作流
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow deactivateFlow --flowID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-releaseflow"></a>
+
+#### `zentao workflow releaseFlow` · 发布工作流
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow releaseFlow --flowID=<number> --navigator=<string> --positionModule=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+| `--navigator` | 请求体 | `string` | 是 | 未声明 | 所属导航(primary 主导航 \| secondary 二级导航)。 |
+| `--position` | 请求体 | `string` | 否 | 未声明 | 菜单位置(before 之前 \| after 之后 \| 空 直接放在模块下)。 |
+| `--positionModule` | 请求体 | `string` | 是 | 未声明 | 位置模块，主导航下通常传 main。 |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setapproval"></a>
+
+#### `zentao workflow setApproval` · 设置工作流审批
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setApproval --module=<string> --approval=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--approval` | 请求体 | `string` | 是 | 未声明 | 是否启用审批(enabled 启用 \| disabled 停用)。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setactioncss"></a>
+
+#### `zentao workflow setActionCSS` · 设置动作CSS
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setActionCSS --actionID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--actionID` | 路径 | `number` | 是 | 未声明 | actionID |
+| `--css` | 请求体 | `string` | 否 | 未声明 | 动作自定义CSS。 |
+
+`--actionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setflowcss"></a>
+
+#### `zentao workflow setFlowCSS` · 设置工作流CSS
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setFlowCSS --flowID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+| `--css` | 请求体 | `string` | 否 | 未声明 | 工作流自定义CSS。 |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setexport"></a>
+
+#### `zentao workflow setExport` · 设置字段导出
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setExport --module=<string> --modules=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--modules` | 请求体 | `string[]` | 是 | 未声明 | 要设置的模块列表。<br>数组元素类型：string |
+| `--fields` | 请求体 | `object` | 否 | 未声明 | 导出字段，键为模块、值为字段代号列表。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setfulltextsearch"></a>
+
+#### `zentao workflow setFulltextSearch` · 设置工作流全文检索
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setFulltextSearch --flowID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+| `--contentField` | 请求体 | `string[]` | 否 | 未声明 | 参与全文检索的字段列表。<br>数组元素类型：string |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setactionjs"></a>
+
+#### `zentao workflow setActionJS` · 设置动作JS
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setActionJS --actionID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--actionID` | 路径 | `number` | 是 | 未声明 | actionID |
+| `--js` | 请求体 | `string` | 否 | 未声明 | 动作自定义JS。 |
+
+`--actionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setflowjs"></a>
+
+#### `zentao workflow setFlowJS` · 设置工作流JS
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setFlowJS --flowID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--flowID` | 路径 | `number` | 是 | 未声明 | flowID |
+| `--js` | 请求体 | `string` | 否 | 未声明 | 工作流自定义JS。 |
+
+`--flowID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setactionnotice"></a>
+
+#### `zentao workflow setActionNotice` · 设置动作通知
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setActionNotice --actionID=<number> --toList=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--actionID` | 路径 | `number` | 是 | 未声明 | actionID |
+| `--toList` | 请求体 | `string[]` | 是 | 未声明 | 通知人账号列表。<br>数组元素类型：string |
+
+`--actionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setsearch"></a>
+
+#### `zentao workflow setSearch` · 设置字段搜索
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setSearch --module=<string> --modules=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--modules` | 请求体 | `string[]` | 是 | 未声明 | 要设置的模块列表。<br>数组元素类型：string |
+| `--fields` | 请求体 | `object` | 否 | 未声明 | 搜索字段，键为模块、值为字段代号列表（按数组顺序作为搜索排序）。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setvalue"></a>
+
+#### `zentao workflow setValue` · 设置字段取值
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setValue --module=<string> --modules=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--module` | 路径 | `string` | 是 | 未声明 | module |
+| `--modules` | 请求体 | `string[]` | 是 | 未声明 | 要设置的模块列表。<br>数组元素类型：string |
+| `--fields` | 请求体 | `object` | 否 | 未声明 | 取值字段，键为模块、值为字段代号列表。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-workflow-setactionverification"></a>
+
+#### `zentao workflow setActionVerification` · 设置动作验证
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflow setActionVerification --actionID=<number> --type=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--actionID` | 路径 | `number` | 是 | 未声明 | actionID |
+| `--type` | 请求体 | `string` | 是 | 未声明 | 验证类型(data 数据验证 \| no 不验证)。 |
+| `--message` | 请求体 | `string` | 否 | 未声明 | 验证失败提示。 |
+| `--verifications` | 请求体 | `object` | 否 | 未声明 | 验证规则，包含 field(字段)、paramType(参数类型)、param(参数) 三个数组。 |
+
+`--actionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
 
 <a id="module-doc"></a>
 
@@ -6206,11 +7320,12 @@ zentao doc deleteModule --moduleID=<number> [选项]
 
 ### todo · 待办
 
-待办管理，支持创建待办、编辑待办、删除待办
+待办管理，支持创建待办、获取待办详情、编辑待办、删除待办
 
 快捷用法与字段查询：
 
 ```text
+zentao todo <id>
 zentao todo props --format=json
 zentao help todo
 ```
@@ -6220,6 +7335,7 @@ zentao help todo
 | 操作 | 用途 |
 | --- | --- |
 | [create](#action-todo-create) | 创建待办 |
+| [get](#action-todo-get) | 获取待办详情 |
 | [update](#action-todo-update) | 编辑待办 |
 | [delete](#action-todo-delete) | 删除待办 |
 
@@ -6245,6 +7361,24 @@ zentao todo create --date=<string> --type=<string> [选项]
 | `--desc` | 请求体 | `string` | 否 | 未声明 | 待办详情 |
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-todo-get"></a>
+
+#### `zentao todo get` · 获取待办详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao todo get --todoID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--todoID` | 路径 | `number` | 是 | 未声明 | 待办ID |
+
+`--todoID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
 
 <a id="action-todo-update"></a>
 
@@ -6296,7 +7430,7 @@ zentao todo delete --todoID=<number> [选项]
 
 ### my · 地盘
 
-地盘管理，支持我的待办、指派给我的任务、指派给我的Bug、指派给我的研发需求、指派给我的业务需求、指派给我的用户需求、我负责的的测试单、我参与的项目、指派给我的反馈、指派给我的工单、指派给我的用例、我的会议、指派给我的问题、指派给我的风险
+地盘管理，支持我的待办、指派给我的任务、指派给我的Bug、指派给我的研发需求、指派给我的业务需求、指派给我的用户需求、我负责的的测试单、我参与的项目、指派给我的反馈、指派给我的工单、指派给我的用例、我的会议、指派给我的问题、指派给我的风险、我的地盘-贡献任务、我的地盘-贡献 Bug、我的地盘-贡献研发需求、我的地盘-贡献业务需求、我的地盘-贡献用户需求、我的地盘-贡献测试单、我的地盘-贡献用例、我的地盘-贡献文档、我的地盘-贡献问题、我的地盘-贡献风险、我的地盘-贡献评审问题、我的地盘-贡献反馈、我的地盘-贡献审批、我的地盘-待处理评审问题、我的地盘-待处理审批、我的地盘-待处理审计计划、我的地盘-待处理不符合项
 
 快捷用法与字段查询：
 
@@ -6323,6 +7457,24 @@ zentao help my
 | [meetings](#action-my-meetings) | 我的会议 |
 | [issues](#action-my-issues) | 指派给我的问题 |
 | [risks](#action-my-risks) | 指派给我的风险 |
+| [activityTasks](#action-my-activitytasks) | 我的地盘-贡献任务 |
+| [activityBugs](#action-my-activitybugs) | 我的地盘-贡献 Bug |
+| [activityStories](#action-my-activitystories) | 我的地盘-贡献研发需求 |
+| [activityEpics](#action-my-activityepics) | 我的地盘-贡献业务需求 |
+| [activityRequirements](#action-my-activityrequirements) | 我的地盘-贡献用户需求 |
+| [activityTestTasks](#action-my-activitytesttasks) | 我的地盘-贡献测试单 |
+| [activityTestCases](#action-my-activitytestcases) | 我的地盘-贡献用例 |
+| [activityDocs](#action-my-activitydocs) | 我的地盘-贡献文档 |
+| [activityIssues](#action-my-activityissues) | 我的地盘-贡献问题 |
+| [activityRisks](#action-my-activityrisks) | 我的地盘-贡献风险 |
+| [activityReviewIssues](#action-my-activityreviewissues) | 我的地盘-贡献评审问题 |
+| [activityFeedbacks](#action-my-activityfeedbacks) | 我的地盘-贡献反馈 |
+| [activityAudits](#action-my-activityaudits) | 我的地盘-贡献审批 |
+| [reviewIssues](#action-my-reviewissues) | 我的地盘-待处理评审问题 |
+| [audits](#action-my-audits) | 我的地盘-待处理审批 |
+| [auditPlans](#action-my-auditplans) | 我的地盘-待处理审计计划 |
+| [ncs](#action-my-ncs) | 我的地盘-待处理不符合项 |
+| [createSSH](#action-my-createssh) | 添加我的 SSH 公钥 |
 
 <a id="action-my-todos"></a>
 
@@ -6336,7 +7488,8 @@ zentao my todos [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；today（今天）；future（将来）；lag（过期）；finished（已完成） |
+| `--status` | 查询 | `string` | 否 | 未声明 | 待办状态；browseType=undone 时传 undone。 |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；today（今天）；thisWeek（本周）；thisMonth（本月）；future（将来）；undone（未完成，需同时传 status=undone）；cycle（周期待办）；assignedToOther（指派他人） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序(date_desc,status,begin 日期/状态/开始时间) |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6355,7 +7508,8 @@ zentao my tasks [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；unclosed（未关闭）；assignedtome（指派给我）；openedbyme（我创建）；finishedbyme（由我完成）；closedbyme（由我关闭） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，取值区分大小写<br>可选值：assignedTo（指派给我）；openedBy（由我创建）；finishedBy（由我完成）；myInvolved（由我参与）；closedBy（由我关闭）；canceledBy（由我取消）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；name_asc（名称 升序）；name_desc（名称 降序）；status_asc（状态 升序）；status_desc（状态 降序）；pri_asc（优先级 升序）；pri_desc（优先级 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6376,7 +7530,8 @@ zentao my bugs [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；unclosed（未关闭）；assignedtome（指派给我）；openedbyme（我创建）；resolvedbyme（由我解决） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，取值取自 zt_bug 的字段名（区分大小写）<br>可选值：assignedTo（指派给我）；openedBy（由我创建）；resolvedBy（由我解决）；closedBy（由我关闭）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序）；severity_asc（严重程度 升序）；severity_desc（严重程度 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6397,11 +7552,12 @@ zentao my stories [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"allstory"` | 状态，默认是allstory<br>可选值：allstory（全部）；assignedtome（指派给我）；openedbyme（我创建）；reviewbyme（待我评审）；draftstory（草稿） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，取值区分大小写<br>可选值：all（全部）；assignedTo（指派给我）；openedBy（由我创建）；reviewBy（待我评审）；reviewedBy（我评审过）；closedBy（由我关闭）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
-| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
 | `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
@@ -6418,11 +7574,12 @@ zentao my epics [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"allstory"` | 状态，默认是allstory<br>可选值：allstory（全部）；assignedtome（指派给我）；openedbyme（我创建）；reviewbyme（待我评审）；draftstory（草稿） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，取值区分大小写<br>可选值：all（全部）；assignedTo（指派给我）；openedBy（由我创建）；reviewBy（待我评审）；reviewedBy（我评审过）；closedBy（由我关闭）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
-| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
 | `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
@@ -6439,11 +7596,12 @@ zentao my requirements [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"allstory"` | 状态，默认是allstory<br>可选值：allstory（全部）；assignedtome（指派给我）；openedbyme（我创建）；reviewbyme（待我评审）；draftstory（草稿） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，取值区分大小写<br>可选值：all（全部）；assignedTo（指派给我）；openedBy（由我创建）；reviewBy（待我评审）；reviewedBy（我评审过）；closedBy（由我关闭）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
-| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
 | `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
@@ -6460,7 +7618,8 @@ zentao my testtasks [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；wait（未开始）；doing（进行中）；done（已完成） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，接口固定返回“我参与的未完成测试单”<br>可选值：assignedTo（我参与的）；bySearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；name_asc（名称 升序）；name_desc（名称 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6479,7 +7638,7 @@ zentao my projects [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；undone（未完成）；wait（未开始）；doing（进行中） |
+| `--browseType` | 查询 | `string` | 否 | `"doing"` | 状态，默认是doing<br>可选值：doing（进行中）；wait（未开始）；suspended（已挂起）；closed（已关闭）；done（已完成）；undone（未完成）；delayed（已延期）；openedbyme（由我创建）；all（全部） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；name_asc（名称 升序）；name_desc（名称 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6498,7 +7657,7 @@ zentao my feedbacks [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；wait（待处理）；doing（处理中）；toclosed（待关闭） |
+| `--browseType` | 查询 | `string` | 否 | `"assigntome"` | 状态，默认是assigntome<br>可选值：assigntome（指派给我）；unclosed（未关闭）；wait（待处理）；doing（处理中）；toclosed（待关闭）；openedbyme（由我创建）；reviewedbyme（我评审过）；closedbyme（由我关闭）；assignedbyme（由我指派） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6519,7 +7678,7 @@ zentao my tickets [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；unclosed（未关闭）；wait（待处理）；doing（处理中）；done（待关闭） |
+| `--browseType` | 查询 | `string` | 否 | `"assignedtome"` | 状态，默认是assignedtome<br>可选值：assignedtome（指派给我）；unclosed（未关闭）；wait（待处理）；doing（处理中）；done（待关闭）；closed（已关闭）；openedbyme（由我创建）；finishedbyme（由我解决）；closedbyme（由我关闭）；assignedbyme（由我指派） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6540,7 +7699,8 @@ zentao my testcases [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；wait（未执行）；doing（执行中）；pass（通过）；fail（失败） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assigntome"` | 状态，默认是assigntome<br>可选值：assigntome（指派给我）；openedbyme（我创建的）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6580,7 +7740,8 @@ zentao my issues [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；open（开放）；assignto（指派给我）；assignby（由我指派）；closed（已关闭）；resolved（已解决）；canceled（已取消） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，取值取自 zt_issue 的字段名<br>可选值：assignedTo（指派给我）；createdBy（由我创建）；resolvedBy（由我解决）；closedBy（由我关闭）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；title_asc（标题 升序）；title_desc（标题 降序）；severity_asc（严重程度 升序）；severity_desc（严重程度 降序）；status_asc（状态 升序）；status_desc（状态 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6599,7 +7760,8 @@ zentao my risks [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"all"` | 状态，默认是all<br>可选值：all（全部）；active（开放）；assignTo（指派给我）；assignBy（由我指派）；closed（已关闭）；hangup（已挂起）；canceled（已取消） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 状态，默认是assignedTo，取值取自 zt_risk 的字段名<br>可选值：assignedTo（指派给我）；createdBy（由我创建）；closedBy（由我关闭）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；name_asc（名称 升序）；name_desc（名称 降序）；status_asc（状态 升序）；status_desc（状态 降序）；pri_asc（优先级 升序）；pri_desc（优先级 降序） |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -6608,9 +7770,1649 @@ zentao my risks [选项]
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
 
+<a id="action-my-activitytasks"></a>
+
+#### `zentao my activityTasks` · 我的地盘-贡献任务
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityTasks [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：name(任务名称，示例：关键字)；keywords(关键词，示例：关键字)；id(编号，示例：1)；status(任务状态，枚举：wait 未开始 \| doing 进行中 \| done 已完成 \| pause 已暂停 \| cancel 已取消 \| closed 已关闭)；desc(任务描述，示例：关键字)；assignedTo(指派给，用户，示例：admin)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；project(所属项目，示例：all)；execution(所属执行，示例：all)；module(所属模块，示例：all)；estimate(最初预计，示例：关键字)；left(预计剩余，示例：关键字)；consumed(总计消耗，示例：关键字)；type(任务类型，枚举：design 设计 \| devel 开发 \| request 需求 \| test 测试 \| study 研究 \| discuss 讨论 \| ui 界面 \| affair 事务 \| misc 其他)；story(相关用户故事，示例：all)；fromBug(来源Bug编号，枚举：design 设计 \| devel 开发 \| request 需求 \| test 测试 \| study 研究 \| discuss 讨论 \| ui 界面 \| affair 事务 \| misc 其他)；closedReason(关闭原因，枚举：done 已完成 \| cancel 已取消)；openedBy(由谁创建，用户，示例：admin)；finishedBy(由谁完成，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；canceledBy(由谁取消，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；openedDate(创建日期，示例：2026-01-01)；deadline(截止日期，示例：2026-01-01)；estStarted(预计开始，示例：2026-01-01)；realStarted(实际开始，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；finishedDate(实际完成，示例：2026-01-01)；closedDate(关闭时间，示例：2026-01-01)；canceledDate(取消时间，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activitybugs"></a>
+
+#### `zentao my activityBugs` · 我的地盘-贡献 Bug
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityBugs [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(Bug标题，示例：关键字)；module(所属模块，模块，示例：0)；keywords(关键词，示例：关键字)；steps(重现步骤，示例：关键字)；assignedTo(指派给，用户，示例：admin)；resolvedBy(解决者，用户，示例：admin)；status(Bug状态，枚举：active 激活 \| resolved 已解决 \| closed 已关闭)；confirmed(是否确认，枚举：1 已确认 \| 0 未确认)；story(相关需求，示例：关键字)；project(所属项目，示例：all)；product(所属产品，示例：all)；branch(branch，示例：all)；plan(所属计划，示例：all)；id(Bug编号，示例：1)；execution(所属执行，执行，示例：3)；severity(严重程度，枚举：1 \| 2 \| 3 \| 4)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；type(Bug类型，枚举：codeerror 代码错误 \| config 配置相关 \| install 安装部署 \| security 安全相关 \| performance 性能问题 \| standard 标准规范 \| automation 测试脚本 \| designdefect 设计缺陷 \| codeimprovement 代码改进 \| others 其他)；os(操作系统，枚举：all 全部 \| windows Windows \| win11 Windows 11 \| win10 Windows 10 \| win8 Windows 8 \| win7 Windows 7 \| winxp Windows XP \| osx Mac OS \| android Android \| ios IOS \| linux Linux \| ubuntu Ubuntu \| chromeos Chrome OS \| fedora Fedora \| unix Unix \| others 其他)；browser(浏览器，枚举：all 全部 \| chrome Chrome \| edge Edge \| ie IE系列 \| ie11 IE11 \| ie10 IE10 \| ie9 IE9 \| ie8 IE8 \| firefox firefox系列 \| opera Opera系列 \| safari \| 360 360浏览器 \| qq QQ浏览器 \| other 其他)；resolution(解决方案，枚举：bydesign 设计如此 \| duplicate 重复Bug \| external 外部原因 \| fixed 已解决 \| notrepro 无法重现 \| postponed 延期处理 \| willnotfix 不予解决 \| tostory 转为用户故事)；activatedCount(激活次数，示例：关键字)；toTask(转任务，示例：关键字)；toStory(转用户故事，示例：关键字)；openedBy(由谁创建，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(修改者，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；openedBuild(影响版本，示例：builds)；resolvedBuild(解决版本，示例：builds)；openedDate(创建日期，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；resolvedDate(解决日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(修改日期，示例：2026-01-01)；deadline(截止日期，示例：2026-01-01)；activatedDate(激活时间，示例：2026-01-01) |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activitystories"></a>
+
+#### `zentao my activityStories` · 我的地盘-贡献研发需求
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityStories [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activityepics"></a>
+
+#### `zentao my activityEpics` · 我的地盘-贡献业务需求
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityEpics [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activityrequirements"></a>
+
+#### `zentao my activityRequirements` · 我的地盘-贡献用户需求
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityRequirements [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(需求名称，示例：关键字)；id(编号，示例：1)；keywords(关键词，示例：关键字)；status(当前状态，枚举：draft 草稿 \| reviewing 评审中 \| active 激活 \| changing 变更中 \| closed 已关闭)；pri(优先级，枚举：1 \| 2 \| 3 \| 4)；module(所属模块，示例：all)；stage(所处阶段，枚举：wait 未开始 \| planned 已计划 \| projected 研发立项 \| designing 设计中 \| designed 设计完毕 \| developing 研发中 \| developed 研发完毕 \| testing 测试中 \| tested 测试完毕 \| verified 已验收 \| rejected 验收失败 \| delivering 交付中 \| delivered 已交付 \| released 已发布 \| closed 已关闭)；product(所属产品，示例：all)；branch(branch，示例：all)；grade(需求层级，示例：all)；plan(所属计划，示例：all)；release(所属发布，示例：all)；estimate(预计小时，示例：关键字)；source(来源，枚举：customer 客户 \| user 用户 \| po 产品经理 \| market 市场 \| service 客服 \| operation 运营 \| support 技术支持 \| competitor 竞争对手 \| partner 合作伙伴 \| dev 开发人员 \| tester 测试人员 \| bug Bug \| forum 论坛 \| other 其他)；sourceNote(来源备注，示例：关键字)；fromBug(来源Bug，示例：关键字)；category(类别，枚举：feature 功能 \| interface 接口 \| performance 性能 \| safe 安全 \| experience 体验 \| improve 改进 \| other 其他)；openedBy(由谁创建，用户，示例：admin)；reviewedBy(已评审人，用户，示例：admin)；result(评审结果，枚举：pass 确认通过 \| revert 撤销变更 \| clarify 有待明确 \| reject 拒绝)；assignedTo(指派给，用户，示例：admin)；closedBy(由谁关闭，用户，示例：admin)；lastEditedBy(最后修改，用户，示例：admin)；mailto(抄送给，用户，示例：admin)；closedReason(关闭原因，枚举：done 已完成 \| subdivided 已拆分 \| duplicate 重复 \| postponed 延期 \| willnotdo 不做 \| cancel 已取消 \| bydesign 设计如此)；version(版本号，示例：关键字)；openedDate(创建日期，示例：2026-01-01)；reviewedDate(评审时间，示例：2026-01-01)；assignedDate(指派日期，示例：2026-01-01)；closedDate(关闭日期，示例：2026-01-01)；lastEditedDate(最后修改日期，示例：2026-01-01)；activatedDate(激活日期，示例：2026-01-01) |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activitytesttasks"></a>
+
+#### `zentao my activityTestTasks` · 我的地盘-贡献测试单
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityTestTasks [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activitytestcases"></a>
+
+#### `zentao my activityTestCases` · 我的地盘-贡献用例
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityTestCases [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：title(用例名称，示例：关键字)；story(关联需求，示例：all)；id(用例编号，示例：1)；keywords(关键词，示例：关键字)；lastEditedBy(修改者，用户，示例：admin)；type(用例类型，枚举：unit 单元测试 \| interface 接口测试 \| feature 功能测试 \| install 安装部署 \| config 配置相关 \| performance 性能测试 \| security 安全相关 \| other 其他)；auto(自动化，枚举：auto 是 \| no 否)；openedBy(由谁创建，用户，示例：admin)；status(用例状态，枚举：wait 待评审 \| normal 正常 \| blocked 被阻塞 \| investigate 研究中)；product(所属产品，示例：all)；branch(branch，示例：all)；stage(适用环节，枚举：unittest 单元测试环节 \| feature 功能测试环节 \| intergrate 集成测试环节 \| system 系统测试环节 \| smoke 冒烟测试环节 \| bvt 版本验证环节)；module(所属模块，模块，示例：0)；pri(优先级，枚举：3 \| 1 \| 2 \| 4)；lib(所属库，示例：all)；lastRunner(执行人，用户，示例：admin)；lastRunResult(结果，枚举：pass 通过 \| fail 失败 \| blocked 阻塞 \| null 未执行)；lastRunDate(执行时间，示例：2026-01-01)；openedDate(创建日期，示例：2026-01-01)；lastEditedDate(修改日期，示例：2026-01-01)；scene(所属场景，示例：all) |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activitydocs"></a>
+
+#### `zentao my activityDocs` · 我的地盘-贡献文档
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityDocs [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activityissues"></a>
+
+#### `zentao my activityIssues` · 我的地盘-贡献问题
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityIssues [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activityrisks"></a>
+
+#### `zentao my activityRisks` · 我的地盘-贡献风险
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityRisks [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：activateBy,actualClosedDate,assignedTo,cancelBy,category,createdBy,createdDate,editedBy,editedDate,hangupBy,id,identifiedDate,impact,name,plannedClosedDate,prevention,pri,probability,project,rate,remedy,resolution,resolvedBy,source,status,strategy,trackedBy |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activityreviewissues"></a>
+
+#### `zentao my activityReviewIssues` · 我的地盘-贡献评审问题
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityReviewIssues [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：assignedDate,assignedTo,createdBy,createdDate,id,opinion,resolution,review,status,title,type |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activityfeedbacks"></a>
+
+#### `zentao my activityFeedbacks` · 我的地盘-贡献反馈
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityFeedbacks [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：activatedBy,activatedDate,assignedTo,closedBy,closedDate,closedReason,desc,feedbackBy,id,keywords,mailto,module,notifyEmail,openedBy,openedDate,pri,processedBy,processedDate,product,public,reviewedBy,solution,source,status,title,type |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-activityaudits"></a>
+
+#### `zentao my activityAudits` · 我的地盘-贡献审批
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my activityAudits [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 贡献筛选类型，不传时使用禅道页面默认值。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-reviewissues"></a>
+
+#### `zentao my reviewIssues` · 我的地盘-待处理评审问题
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my reviewIssues [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 或 bySearch 时必填。 |
+| `--browseType` | 查询 | `string` | 否 | `"assignedTo"` | 待处理筛选类型，默认 assignedTo，取值取自 zt_reviewissue 的字段名<br>可选值：assignedTo（指派给我）；createdBy（由我创建）；resolutionBy（由我解决）；assignedBy（由我指派）；bysearch（按查询搜索，需同时传 param） |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：assignedDate,assignedTo,createdBy,createdDate,id,opinion,resolution,review,status,title,type |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-audits"></a>
+
+#### `zentao my audits` · 我的地盘-待处理审批
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my audits [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 待处理审批类型，默认 all<br>可选值：all（全部）；demand（需求池需求）；story（研发需求）；requirement（用户需求）；epic（业务需求）；testcase（用例）；project（项目）；ppm（评审请求）；feedback（反馈）；自定义工作流模块代号（自定义工作流模块代号） |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-auditplans"></a>
+
+#### `zentao my auditPlans` · 我的地盘-待处理审计计划
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my auditPlans [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | `"myChecking"` | 待处理筛选类型，默认 myChecking，取值不区分大小写<br>可选值：mychecking（待我检查）；checked（已检查）；wait（未检查）；checking（检查中）；assignto（指派给我）；delay（已延期）；iscycle（周期性计划）；all（全部） |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-ncs"></a>
+
+#### `zentao my ncs` · 我的地盘-待处理不符合项
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao my ncs [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | `"assignedToMe"` | 待处理筛选类型，默认 assignedToMe<br>可选值：assignedToMe（指派给我）；createdByMe（由我创建）；resolvedByMe（由我解决）；closedByMe（由我关闭）；all（全部） |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-my-createssh"></a>
+
+#### `zentao my createSSH` · 添加我的 SSH 公钥
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+需部署代码库 API 2.0 实现并配置 GitFox，将公钥添加到当前 Token 用户的 GitFox 账号，account 不能改变归属。成功仅返回 message，不返回密钥 ID；公钥错误保留在 rawMessage.publicKey 中。
+
+```text
+zentao my createSSH --name=<string> --publicKey=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 密钥名称，去除首尾空白后仅允许英文字母、数字、连字符、下划线、点和 $<br>最小长度：1 |
+| `--publicKey` | 请求体 | `string` | 是 | 未声明 | 完整单行 SSH 公钥文本，去除首尾空白；支持 ssh-rsa、ecdsa-sha2-nistp256/384/521、ssh-ed25519、sk-ecdsa-sha2-nistp256@openssh.com、sk-ssh-ed25519@openssh.com 前缀，完整性及重复检查由 GitFox 处理<br>最小长度：1 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-process"></a>
+
+### process · 过程裁剪
+
+过程裁剪管理，支持获取过程裁剪列表，支持获取项目/执行下的过程裁剪、提交项目过程裁剪结果、提交执行过程裁剪结果
+
+快捷用法与字段查询：
+
+```text
+zentao process [列表参数]
+zentao process props --format=json
+zentao help process
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-process-list) | 获取过程裁剪列表，支持获取项目/执行下的过程裁剪 |
+| [setProject](#action-process-setproject) | 提交项目过程裁剪结果 |
+| [setExecution](#action-process-setexecution) | 提交执行过程裁剪结果 |
+
+<a id="action-process-list"></a>
+
+#### `zentao process list` · 获取过程裁剪列表，支持获取项目/执行下的过程裁剪
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao process list --project=<id> [选项]
+```
+
+范围必填：用法中以 `--project` 为例，也可从 `--project=<id>`（项目）、`--execution=<id>`（执行） 中选择一个，代替 scope 与 scopeID。
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--scope` | 路径 | `string` | 是 | 未声明 | 过程裁剪所属范围<br>可选值：projects（项目）；executions（执行） |
+| `--scopeID` | 路径 | `number` | 是 | 未声明 | 所属范围ID |
+| `--browseType` | 查询 | `string` | 否 | `"wait"` | 过程裁剪筛选类型，默认 wait<br>可选值：wait（待裁剪）；yes（已裁剪适用）；no（已裁剪不适用） |
+| `--moduleID` | 查询 | `number` | 否 | `"0"` | 过程 ID，用于只查询指定过程下的活动和交付物；默认 0。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-process-setproject"></a>
+
+#### `zentao process setProject` · 提交项目过程裁剪结果
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao process setProject --projectID=<number> --items=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--items` | 请求体 | `string[]` | 是 | 未声明 | 裁剪结果列表，每项包含 type(activity 活动 \| deliverable 交付物)、id(对象ID)、result(yes 适用 \| no 不适用)<br>数组元素类型：string |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-process-setexecution"></a>
+
+#### `zentao process setExecution` · 提交执行过程裁剪结果
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao process setExecution --executionID=<number> --items=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--executionID` | 路径 | `number` | 是 | 未声明 | 执行ID |
+| `--items` | 请求体 | `string[]` | 是 | 未声明 | 裁剪结果列表，每项包含 type(activity 活动 \| deliverable 交付物)、id(对象ID)、result(yes 适用 \| no 不适用)<br>数组元素类型：string |
+
+`--executionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-auditplan"></a>
+
+### auditplan · 质量保证计划
+
+质量保证计划管理，支持获取质量保证计划列表，支持获取项目/执行下的质量保证计划、新增质量保证计划、检查质量保证计划、批量新增项目质量保证计划、获取质量保证详情、编辑质量保证计划、删除质量保证计划
+
+快捷用法与字段查询：
+
+```text
+zentao auditplan <id>
+zentao auditplan [列表参数]
+zentao auditplan props --format=json
+zentao help auditplan
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-auditplan-list) | 获取质量保证计划列表，支持获取项目/执行下的质量保证计划 |
+| [create](#action-auditplan-create) | 新增质量保证计划 |
+| [check](#action-auditplan-check) | 检查质量保证计划 |
+| [batchCreate](#action-auditplan-batchcreate) | 批量新增项目质量保证计划 |
+| [get](#action-auditplan-get) | 获取质量保证详情 |
+| [update](#action-auditplan-update) | 编辑质量保证计划 |
+| [delete](#action-auditplan-delete) | 删除质量保证计划 |
+
+<a id="action-auditplan-list"></a>
+
+#### `zentao auditplan list` · 获取质量保证计划列表，支持获取项目/执行下的质量保证计划
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao auditplan list --project=<id> [选项]
+```
+
+范围必填：用法中以 `--project` 为例，也可从 `--project=<id>`（项目）、`--execution=<id>`（执行） 中选择一个，代替 scope 与 scopeID。
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--scope` | 路径 | `string` | 是 | 未声明 | 质量保证计划所属范围<br>可选值：projects（项目）；executions（执行） |
+| `--scopeID` | 路径 | `number` | 是 | 未声明 | 所属范围ID |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 筛选类型，默认 all<br>可选值：all（全部）；wait（待检查）；checking（检查中）；checked（已检查）；assignto（指派给我）；delay（已延期）；today（今天）；yesterday（昨天）；lastmonth（上月）；month（本月）；nextmonth（下月）；iscycle（周期计划） |
+| `--param` | 查询 | `number` | 否 | 未声明 | 筛选参数。browseType=bysearch 时传查询 ID；按过程筛选时传过程 ID；按执行筛选时传执行 ID。 |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
+| `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
+| `--pageID` | 查询 | `number` | 否 | `"1"` | 页码，默认 1。<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：assignedTo,checkDate,checkedBy,createdBy,createdDate,execution,id,objectID,process,realCheckDate,status |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-auditplan-create"></a>
+
+#### `zentao auditplan create` · 新增质量保证计划
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao auditplan create --projectID=<number> --process=<number> --objectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 请求体 | `number` | 是 | 未声明 | 所属项目或执行 ID<br>格式：int32<br>必须为整数 |
+| `--execution` | 请求体 | `number` | 否 | 未声明 | 所属执行 ID，项目级计划传 0；敏捷多执行项目下需要传执行 ID<br>格式：int32<br>必须为整数 |
+| `--process` | 请求体 | `number` | 是 | 未声明 | 所属过程 ID<br>格式：int32<br>必须为整数 |
+| `--objectID` | 请求体 | `number` | 是 | 未声明 | 检查对象 ID（活动或交付物 ID）<br>格式：int32<br>必须为整数 |
+| `--objectType` | 请求体 | `string` | 否 | 未声明 | 检查对象类型(activity 活动 \| zoutput 交付物) |
+| `--status` | 请求体 | `string` | 否 | 未声明 | 状态(wait 待检查 \| checking 检查中 \| checked 已检查) |
+| `--isCycle` | 请求体 | `number` | 否 | 未声明 | 是否周期计划(0 否 \| 1 是)<br>格式：int32<br>必须为整数 |
+| `--checkDateList` | 请求体 | `string[]` | 否 | 未声明 | 计划检查日期列表<br>数组元素类型：string |
+| `--assignedToList` | 请求体 | `string[]` | 否 | 未声明 | 检查人账号列表<br>数组元素类型：string |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-auditplan-check"></a>
+
+#### `zentao auditplan check` · 检查质量保证计划
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao auditplan check --auditplanID=<number> --listID=<string[]> --result=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--auditplanID` | 路径 | `number` | 是 | 未声明 | auditplanID |
+| `--listID` | 请求体 | `string[]` | 是 | 未声明 | 检查清单项 ID 列表<br>数组元素类型：string |
+| `--result` | 请求体 | `string[]` | 是 | 未声明 | 检查结果列表(pass 通过 \| fail 不通过)<br>数组元素类型：string |
+| `--status` | 请求体 | `string[]` | 否 | 未声明 | 结果状态列表(normal 正式提交 \| draft 草稿)<br>数组元素类型：string |
+
+`--auditplanID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-auditplan-batchcreate"></a>
+
+#### `zentao auditplan batchCreate` · 批量新增项目质量保证计划
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao auditplan batchCreate --projectID=<number> --process=<string[]> --objectID=<string[]> --checkDate=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--process` | 请求体 | `string[]` | 是 | 未声明 | 过程 ID 列表<br>数组元素类型：string |
+| `--execution` | 请求体 | `string[]` | 否 | 未声明 | 执行 ID 列表，项目级计划传 0<br>数组元素类型：string |
+| `--objectID` | 请求体 | `string[]` | 是 | 未声明 | 检查对象 ID 列表<br>数组元素类型：string |
+| `--objectType` | 请求体 | `string[]` | 否 | 未声明 | 对象类型列表(activity 活动 \| zoutput 交付物)<br>数组元素类型：string |
+| `--checkDate` | 请求体 | `string[]` | 是 | 未声明 | 计划检查日期列表<br>数组元素类型：string |
+| `--assignedTo` | 请求体 | `string[]` | 否 | 未声明 | 指派人账号列表<br>数组元素类型：string |
+| `--status` | 请求体 | `string[]` | 否 | 未声明 | 状态列表(wait 待检查 \| checking 检查中 \| checked 已检查)<br>数组元素类型：string |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-auditplan-get"></a>
+
+#### `zentao auditplan get` · 获取质量保证详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao auditplan get --auditplanID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--auditplanID` | 路径 | `number` | 是 | 未声明 | auditplanID |
+
+`--auditplanID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-auditplan-update"></a>
+
+#### `zentao auditplan update` · 编辑质量保证计划
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao auditplan update --auditplanID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--auditplanID` | 路径 | `number` | 是 | 未声明 | auditplanID |
+| `--execution` | 请求体 | `number` | 否 | 未声明 | 所属执行 ID，项目级计划传 0。<br>格式：int32<br>必须为整数 |
+| `--process` | 请求体 | `number` | 否 | 未声明 | 所属过程 ID。<br>格式：int32<br>必须为整数 |
+| `--objectID` | 请求体 | `number` | 否 | 未声明 | 检查对象 ID。<br>格式：int32<br>必须为整数 |
+| `--objectType` | 请求体 | `string` | 否 | 未声明 | 检查对象类型(activity 活动 \| zoutput 交付物) |
+| `--status` | 请求体 | `string` | 否 | 未声明 | 状态(wait 待检查 \| checking 检查中 \| checked 已检查) |
+| `--assignedTo` | 请求体 | `string` | 否 | 未声明 | 指派人账号。 |
+| `--comment` | 请求体 | `string` | 否 | 未声明 | 编辑备注。 |
+
+`--auditplanID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-auditplan-delete"></a>
+
+#### `zentao auditplan delete` · 删除质量保证计划
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao auditplan delete --auditplanID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--auditplanID` | 路径 | `number` | 是 | 未声明 | auditplanID |
+
+`--auditplanID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-nc"></a>
+
+### nc · 不符合项
+
+不符合项管理，支持获取不符合项列表，支持获取项目/执行下的不符合项、新建项目不符合项、新建执行不符合项、获取不符合项详情、编辑不符合项、删除不符合项
+
+快捷用法与字段查询：
+
+```text
+zentao nc <id>
+zentao nc [列表参数]
+zentao nc props --format=json
+zentao help nc
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-nc-list) | 获取不符合项列表，支持获取项目/执行下的不符合项 |
+| [createProject](#action-nc-createproject) | 新建项目不符合项 |
+| [createExecution](#action-nc-createexecution) | 新建执行不符合项 |
+| [get](#action-nc-get) | 获取不符合项详情 |
+| [update](#action-nc-update) | 编辑不符合项 |
+| [delete](#action-nc-delete) | 删除不符合项 |
+
+<a id="action-nc-list"></a>
+
+#### `zentao nc list` · 获取不符合项列表，支持获取项目/执行下的不符合项
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao nc list --project=<id> [选项]
+```
+
+范围必填：用法中以 `--project` 为例，也可从 `--project=<id>`（项目）、`--execution=<id>`（执行） 中选择一个，代替 scope 与 scopeID。
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--scope` | 路径 | `string` | 是 | 未声明 | 不符合项所属范围<br>可选值：projects（项目）；executions（执行） |
+| `--scopeID` | 路径 | `number` | 是 | 未声明 | 所属范围ID |
+| `--browseType` | 查询 | `string` | 否 | `"unclosed"` | 筛选类型，默认 unclosed<br>可选值：all（全部）；unclosed（未关闭）；assignedtome（指派给我）；assignedbyme（由我指派）；bysearch（搜索） |
+| `--param` | 查询 | `string` | 否 | 未声明 | browseType=bysearch 时传查询 ID。 |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
+| `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
+| `--pageID` | 查询 | `number` | 否 | `"1"` | 页码，默认 1。<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-nc-createproject"></a>
+
+#### `zentao nc createProject` · 新建项目不符合项
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao nc createProject --projectID=<number> --objectType=<string> --title=<string> --severity=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--objectType` | 请求体 | `string` | 是 | 未声明 | 不符合项对象类型(auditplan 质量保证计划 \| deliverable 交付物) |
+| `--title` | 请求体 | `string` | 是 | 未声明 | 不符合项名称 |
+| `--execution` | 请求体 | `number` | 否 | 未声明 | 所属执行 ID，项目级不符合项传 0<br>格式：int32<br>必须为整数 |
+| `--auditplan` | 请求体 | `number` | 否 | 未声明 | 质量保证计划 ID，objectType=auditplan 时必填<br>格式：int32<br>必须为整数 |
+| `--listID` | 请求体 | `number` | 否 | 未声明 | 检查清单项 ID，objectType=auditplan 时必填<br>格式：int32<br>必须为整数 |
+| `--severity` | 请求体 | `number` | 是 | 未声明 | 严重程度(1 严重 \| 2 中等 \| 3 轻微)<br>格式：int32<br>必须为整数 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 不符合项分类 |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-nc-createexecution"></a>
+
+#### `zentao nc createExecution` · 新建执行不符合项
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao nc createExecution --executionID=<number> --objectType=<string> --title=<string> --severity=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--executionID` | 路径 | `number` | 是 | 未声明 | 执行ID |
+| `--objectType` | 请求体 | `string` | 是 | 未声明 | 不符合项对象类型(auditplan 质量保证计划 \| deliverable 交付物) |
+| `--title` | 请求体 | `string` | 是 | 未声明 | 不符合项名称 |
+| `--auditplan` | 请求体 | `number` | 否 | 未声明 | 质量保证计划 ID，objectType=auditplan 时必填<br>格式：int32<br>必须为整数 |
+| `--listID` | 请求体 | `number` | 否 | 未声明 | 检查清单项 ID，objectType=auditplan 时必填<br>格式：int32<br>必须为整数 |
+| `--severity` | 请求体 | `number` | 是 | 未声明 | 严重程度(1 严重 \| 2 中等 \| 3 轻微)<br>格式：int32<br>必须为整数 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 不符合项分类 |
+
+`--executionID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-nc-get"></a>
+
+#### `zentao nc get` · 获取不符合项详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao nc get --ncID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--ncID` | 路径 | `number` | 是 | 未声明 | ncID |
+
+`--ncID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-nc-update"></a>
+
+#### `zentao nc update` · 编辑不符合项
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao nc update --ncID=<number> --title=<string> --severity=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--ncID` | 路径 | `number` | 是 | 未声明 | ncID |
+| `--title` | 请求体 | `string` | 是 | 未声明 | 不符合项名称 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 不符合项分类 |
+| `--execution` | 请求体 | `number` | 否 | 未声明 | 所属执行 ID，项目级不符合项传 0。<br>格式：int32<br>必须为整数 |
+| `--auditplan` | 请求体 | `number` | 否 | 未声明 | 质量保证计划 ID，基于质量保证计划的不符合项必填。<br>格式：int32<br>必须为整数 |
+| `--listID` | 请求体 | `number` | 否 | 未声明 | 检查清单项 ID，基于质量保证计划的不符合项必填。<br>格式：int32<br>必须为整数 |
+| `--severity` | 请求体 | `number` | 是 | 未声明 | 严重程度(1 严重 \| 2 中等 \| 3 轻微)<br>格式：int32<br>必须为整数 |
+| `--assignedTo` | 请求体 | `string` | 否 | 未声明 | 指派人账号。 |
+| `--deadline` | 请求体 | `string` | 否 | 未声明 | 计划解决日期。 |
+| `--desc` | 请求体 | `string` | 否 | 未声明 | 完成情况说明。 |
+
+`--ncID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-nc-delete"></a>
+
+#### `zentao nc delete` · 删除不符合项
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao nc delete --ncID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--ncID` | 路径 | `number` | 是 | 未声明 | ncID |
+
+`--ncID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-opportunity"></a>
+
+### opportunity · 机会
+
+机会管理，支持获取机会列表，支持获取项目/执行下的机会、创建项目机会、批量创建项目机会、获取机会详情、编辑机会、删除机会
+
+快捷用法与字段查询：
+
+```text
+zentao opportunity <id>
+zentao opportunity [列表参数]
+zentao opportunity props --format=json
+zentao help opportunity
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-opportunity-list) | 获取机会列表，支持获取项目/执行下的机会 |
+| [create](#action-opportunity-create) | 创建项目机会 |
+| [batchCreate](#action-opportunity-batchcreate) | 批量创建项目机会 |
+| [get](#action-opportunity-get) | 获取机会详情 |
+| [update](#action-opportunity-update) | 编辑机会 |
+| [delete](#action-opportunity-delete) | 删除机会 |
+
+<a id="action-opportunity-list"></a>
+
+#### `zentao opportunity list` · 获取机会列表，支持获取项目/执行下的机会
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao opportunity list --project=<id> [选项]
+```
+
+范围必填：用法中以 `--project` 为例，也可从 `--project=<id>`（项目）、`--execution=<id>`（执行） 中选择一个，代替 scope 与 scopeID。
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--scope` | 路径 | `string` | 是 | 未声明 | 机会所属范围<br>可选值：projects（项目）；executions（执行） |
+| `--scopeID` | 路径 | `number` | 是 | 未声明 | 所属范围ID |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 筛选类型，默认 all<br>可选值：all（全部）；active（开放）；assignTo（指派给我）；closed（已关闭）；hangup（已挂起）；canceled（已取消）；review（待评审）；bysearch（搜索） |
+| `--param` | 查询 | `string` | 否 | 未声明 | 搜索参数；browseType=bysearch 时使用。 |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
+| `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
+| `--pageID` | 查询 | `number` | 否 | `"1"` | 页码，默认 1。<br>也可使用 --page |
+| `--filters` | 查询 | `array` | 否 | 未声明 | 搜索条件数组，每项包含 field/operator/value/join/group；field 必须是该接口支持的搜索字段，operator 使用该接口搜索配置支持的操作符。支持搜索字段：activatedBy,actualClosedDate,assignedTo,canceledBy,chance,createdBy,createdDate,desc,editedBy,editedDate,hangupedBy,id,identifiedDate,impact,lastCheckedBy,name,plannedClosedDate,prevention,pri,ratio,resolution,resolvedBy,source,status,strategy,type |
+| `--groupJoin` | 查询 | `string` | 否 | 未声明 | 条件组之间的连接方式<br>可选值：and（and）；or（or） |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-opportunity-create"></a>
+
+#### `zentao opportunity create` · 创建项目机会
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao opportunity create --projectID=<number> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 机会名称。 |
+| `--source` | 请求体 | `string` | 否 | 未声明 | 机会来源。 |
+| `--execution` | 请求体 | `number` | 否 | 未声明 | 所属执行 ID，项目级机会传 0；传执行 ID 时机会同时归属项目和执行。<br>格式：int32<br>必须为整数 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 机会类型。 |
+| `--strategy` | 请求体 | `string` | 否 | 未声明 | 机会应对策略。 |
+| `--impact` | 请求体 | `number` | 否 | 未声明 | 影响程度，1-5。<br>格式：int32<br>必须为整数 |
+| `--chance` | 请求体 | `number` | 否 | 未声明 | 发生概率，1-5。<br>格式：int32<br>必须为整数 |
+| `--ratio` | 请求体 | `number` | 否 | 未声明 | 机会系数，通常为 impact * chance。<br>格式：int32<br>必须为整数 |
+| `--pri` | 请求体 | `number` | 否 | 未声明 | 优先级，1 高、2 中、3 低。<br>格式：int32<br>必须为整数 |
+| `--identifiedDate` | 请求体 | `string` | 否 | 未声明 | 机会识别日期。 |
+| `--plannedClosedDate` | 请求体 | `string` | 否 | 未声明 | 计划关闭日期。 |
+| `--assignedTo` | 请求体 | `string` | 否 | 未声明 | 指派人账号。 |
+| `--desc` | 请求体 | `string` | 否 | 未声明 | 机会描述。 |
+| `--prevention` | 请求体 | `string` | 否 | 未声明 | 应对措施。 |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-opportunity-batchcreate"></a>
+
+#### `zentao opportunity batchCreate` · 批量创建项目机会
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao opportunity batchCreate --projectID=<number> --name=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--name` | 请求体 | `string[]` | 是 | 未声明 | 机会名称列表<br>数组元素类型：string |
+| `--source` | 请求体 | `string[]` | 否 | 未声明 | 机会来源列表<br>数组元素类型：string |
+| `--execution` | 请求体 | `string[]` | 否 | 未声明 | 所属执行 ID 列表，项目级机会传 0<br>数组元素类型：string |
+| `--impact` | 请求体 | `string[]` | 否 | 未声明 | 影响程度列表，1-5<br>数组元素类型：string |
+| `--chance` | 请求体 | `string[]` | 否 | 未声明 | 发生概率列表，1-5<br>数组元素类型：string |
+| `--pri` | 请求体 | `string[]` | 否 | 未声明 | 优先级列表，1 高、2 中、3 低<br>数组元素类型：string |
+| `--desc` | 请求体 | `string[]` | 否 | 未声明 | 机会描述列表<br>数组元素类型：string |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-opportunity-get"></a>
+
+#### `zentao opportunity get` · 获取机会详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao opportunity get --opportunityID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--opportunityID` | 路径 | `number` | 是 | 未声明 | opportunityID |
+
+`--opportunityID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-opportunity-update"></a>
+
+#### `zentao opportunity update` · 编辑机会
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao opportunity update --opportunityID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--opportunityID` | 路径 | `number` | 是 | 未声明 | opportunityID |
+| `--name` | 请求体 | `string` | 否 | 未声明 | 机会名称。 |
+| `--source` | 请求体 | `string` | 否 | 未声明 | 机会来源。 |
+| `--execution` | 请求体 | `number` | 否 | 未声明 | 所属执行 ID，项目级机会传 0。<br>格式：int32<br>必须为整数 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 机会类型。 |
+| `--strategy` | 请求体 | `string` | 否 | 未声明 | 机会应对策略。 |
+| `--status` | 请求体 | `string` | 否 | 未声明 | 机会状态(active 开放 \| closed 已关闭 \| hangup 已挂起 \| canceled 已取消) |
+| `--impact` | 请求体 | `number` | 否 | 未声明 | 影响程度，1-5。<br>格式：int32<br>必须为整数 |
+| `--chance` | 请求体 | `number` | 否 | 未声明 | 发生概率，1-5。<br>格式：int32<br>必须为整数 |
+| `--pri` | 请求体 | `number` | 否 | 未声明 | 优先级，1 高、2 中、3 低。<br>格式：int32<br>必须为整数 |
+| `--assignedTo` | 请求体 | `string` | 否 | 未声明 | 指派人账号。 |
+| `--desc` | 请求体 | `string` | 否 | 未声明 | 机会描述。 |
+| `--prevention` | 请求体 | `string` | 否 | 未声明 | 应对措施。 |
+
+`--opportunityID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-opportunity-delete"></a>
+
+#### `zentao opportunity delete` · 删除机会
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao opportunity delete --opportunityID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--opportunityID` | 路径 | `number` | 是 | 未声明 | opportunityID |
+
+`--opportunityID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-deliverable"></a>
+
+### deliverable · 交付物
+
+交付物管理，支持获取交付物列表，支持获取项目下的交付物、新增项目交付物、获取交付物详情、删除项目交付物
+
+快捷用法与字段查询：
+
+```text
+zentao deliverable <id>
+zentao deliverable [列表参数]
+zentao deliverable props --format=json
+zentao help deliverable
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-deliverable-list) | 获取交付物列表，支持获取项目下的交付物 |
+| [create](#action-deliverable-create) | 新增项目交付物 |
+| [get](#action-deliverable-get) | 获取交付物详情 |
+| [delete](#action-deliverable-delete) | 删除项目交付物 |
+
+<a id="action-deliverable-list"></a>
+
+#### `zentao deliverable list` · 获取交付物列表，支持获取项目下的交付物
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao deliverable list --projectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 所属项目ID |
+| `--browseType` | 查询 | `string` | 否 | `"normal"` | 交付物筛选类型，默认 normal<br>可选值：normal（全部）；pending（待提交）；pendingme（待我评审）；submitbyme（我提交的）；reviewedbyme（我评审过的）；pass（已通过）；fail（未通过）；bymodule（按模块）；bysearch（搜索） |
+| `--param` | 查询 | `string` | 否 | 未声明 | browseType 为 bymodule 时传模块 ID，为 bysearch 时传已保存查询 ID。 |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
+| `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
+| `--pageID` | 查询 | `number` | 否 | `"1"` | 页码，默认 1。<br>也可使用 --page |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-deliverable-create"></a>
+
+#### `zentao deliverable create` · 新增项目交付物
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao deliverable create --projectID=<number> --deliverable=<number> --sourceType=<string> --sourceID=<number> --doc=<object> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--deliverable` | 请求体 | `number` | 是 | 未声明 | 交付物定义 ID，取自交付物列表返回的 deliverable 字段。<br>格式：int32<br>必须为整数 |
+| `--sourceType` | 请求体 | `string` | 是 | 未声明 | 来源类型(project 项目 \| task 任务)。 |
+| `--sourceID` | 请求体 | `number` | 是 | 未声明 | 来源对象 ID，sourceType=project 时传项目 ID。<br>格式：int32<br>必须为整数 |
+| `--doc` | 请求体 | `object` | 是 | 未声明 | 交付物文档，键为交付物定义 ID；每项包含 doc(文档 ID 列表)、docVersion(版本列表)、name(名称列表)。 |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-deliverable-get"></a>
+
+#### `zentao deliverable get` · 获取交付物详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao deliverable get --deliverableID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--deliverableID` | 路径 | `number` | 是 | 未声明 | deliverableID |
+
+`--deliverableID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-deliverable-delete"></a>
+
+#### `zentao deliverable delete` · 删除项目交付物
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao deliverable delete --deliverableID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--deliverableID` | 路径 | `number` | 是 | 未声明 | deliverableID |
+
+`--deliverableID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-baseline"></a>
+
+### baseline · 基线
+
+基线管理，支持获取基线列表，支持获取项目下的基线、创建项目基线、获取基线详情、编辑项目基线、删除项目基线
+
+快捷用法与字段查询：
+
+```text
+zentao baseline <id>
+zentao baseline [列表参数]
+zentao baseline props --format=json
+zentao help baseline
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-baseline-list) | 获取基线列表，支持获取项目下的基线 |
+| [create](#action-baseline-create) | 创建项目基线 |
+| [get](#action-baseline-get) | 获取基线详情 |
+| [update](#action-baseline-update) | 编辑项目基线 |
+| [delete](#action-baseline-delete) | 删除项目基线 |
+
+<a id="action-baseline-list"></a>
+
+#### `zentao baseline list` · 获取基线列表，支持获取项目下的基线
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao baseline list --projectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 所属项目ID |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 基线状态筛选，默认 all<br>可选值：all（全部）；wait（待提交）；reviewing（评审中）；pass（已通过）；reject（已拒绝） |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
+| `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
+| `--pageID` | 查询 | `number` | 否 | `"1"` | 页码，默认 1。<br>也可使用 --page |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-baseline-create"></a>
+
+#### `zentao baseline create` · 创建项目基线
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao baseline create --projectID=<number> --title=<string> --version=<string> --category=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--title` | 请求体 | `string` | 是 | 未声明 | 基线名称。 |
+| `--version` | 请求体 | `string` | 是 | 未声明 | 基线版本。 |
+| `--category` | 请求体 | `string[]` | 是 | 未声明 | 纳入基线的交付物 ID 列表。<br>数组元素类型：string |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 基线类型。 |
+| `--status` | 请求体 | `string` | 否 | 未声明 | 基线状态。 |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-baseline-get"></a>
+
+#### `zentao baseline get` · 获取基线详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao baseline get --baselineID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--baselineID` | 路径 | `number` | 是 | 未声明 | baselineID |
+
+`--baselineID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-baseline-update"></a>
+
+#### `zentao baseline update` · 编辑项目基线
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao baseline update --baselineID=<number> --title=<string> --version=<string> --category=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--baselineID` | 路径 | `number` | 是 | 未声明 | baselineID |
+| `--title` | 请求体 | `string` | 是 | 未声明 | 基线名称。 |
+| `--version` | 请求体 | `string` | 是 | 未声明 | 基线版本。 |
+| `--category` | 请求体 | `string[]` | 是 | 未声明 | 纳入基线的交付物 ID 列表。<br>数组元素类型：string |
+| `--comment` | 请求体 | `string` | 否 | 未声明 | 编辑备注。 |
+
+`--baselineID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-baseline-delete"></a>
+
+#### `zentao baseline delete` · 删除项目基线
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao baseline delete --baselineID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--baselineID` | 路径 | `number` | 是 | 未声明 | baselineID |
+
+`--baselineID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-change"></a>
+
+### change · 项目变更
+
+项目变更管理，支持获取项目变更列表，支持获取项目下的项目变更、创建项目变更、获取变更详情、编辑项目变更、删除项目变更
+
+快捷用法与字段查询：
+
+```text
+zentao change <id>
+zentao change [列表参数]
+zentao change props --format=json
+zentao help change
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-change-list) | 获取项目变更列表，支持获取项目下的项目变更 |
+| [create](#action-change-create) | 创建项目变更 |
+| [get](#action-change-get) | 获取变更详情 |
+| [update](#action-change-update) | 编辑项目变更 |
+| [delete](#action-change-delete) | 删除项目变更 |
+
+<a id="action-change-list"></a>
+
+#### `zentao change list` · 获取项目变更列表，支持获取项目下的项目变更
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao change list --projectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 所属项目ID |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 变更状态筛选，默认 all<br>可选值：all（全部）；wait（待提交）；reviewing（评审中）；pass（已通过）；reject（已拒绝）；reverting（撤销中） |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
+| `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
+| `--pageID` | 查询 | `number` | 否 | `"1"` | 页码，默认 1。<br>也可使用 --page |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-change-create"></a>
+
+#### `zentao change create` · 创建项目变更
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao change create --projectID=<number> --name=<string> --urgency=<string> --type=<string> --owner=<string> --reason=<string> --desc=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 变更名称。 |
+| `--urgency` | 请求体 | `string` | 是 | 未声明 | 紧急程度。 |
+| `--type` | 请求体 | `string` | 是 | 未声明 | 变更类型。 |
+| `--owner` | 请求体 | `string` | 是 | 未声明 | 变更负责人。 |
+| `--reason` | 请求体 | `string` | 是 | 未声明 | 变更原因。 |
+| `--desc` | 请求体 | `string` | 是 | 未声明 | 变更描述。 |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-change-get"></a>
+
+#### `zentao change get` · 获取变更详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao change get --changeID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--changeID` | 路径 | `number` | 是 | 未声明 | changeID |
+
+`--changeID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-change-update"></a>
+
+#### `zentao change update` · 编辑项目变更
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao change update --changeID=<number> --name=<string> --urgency=<string> --type=<string> --owner=<string> --reason=<string> --desc=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--changeID` | 路径 | `number` | 是 | 未声明 | changeID |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 变更名称。 |
+| `--urgency` | 请求体 | `string` | 是 | 未声明 | 紧急程度。 |
+| `--type` | 请求体 | `string` | 是 | 未声明 | 变更类型。 |
+| `--owner` | 请求体 | `string` | 是 | 未声明 | 变更负责人。 |
+| `--reason` | 请求体 | `string` | 是 | 未声明 | 变更原因。 |
+| `--desc` | 请求体 | `string` | 是 | 未声明 | 变更描述。 |
+
+`--changeID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-change-delete"></a>
+
+#### `zentao change delete` · 删除项目变更
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao change delete --changeID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--changeID` | 路径 | `number` | 是 | 未声明 | changeID |
+
+`--changeID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-relation"></a>
+
+### relation · 对象关联
+
+对象关联管理，支持关联对象、查询可关联对象、查询关联对象、删除关联对象
+
+快捷用法与字段查询：
+
+```text
+zentao relation [列表参数]
+zentao relation props --format=json
+zentao help relation
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [link](#action-relation-link) | 关联对象 |
+| [candidates](#action-relation-candidates) | 查询可关联对象 |
+| [list](#action-relation-list) | 查询关联对象 |
+| [unlink](#action-relation-unlink) | 删除关联对象 |
+
+<a id="action-relation-link"></a>
+
+#### `zentao relation link` · 关联对象
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao relation link --objectType=<string> --objectID=<number> --relatedObjectType=<string> --relation=<string[]> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--objectType` | 路径 | `string` | 是 | 未声明 | objectType |
+| `--objectID` | 路径 | `number` | 是 | 未声明 | objectID |
+| `--relatedObjectType` | 路径 | `string` | 是 | 未声明 | relatedObjectType |
+| `--relation` | 请求体 | `string[]` | 是 | 未声明 | 被关联对象 ID 与关系 key 的映射，键为候选接口返回的 objects[].id，值为 relationPairs 返回的 key。<br>数组元素类型：string |
+
+`--objectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-relation-candidates"></a>
+
+#### `zentao relation candidates` · 查询可关联对象
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao relation candidates --objectType=<string> --objectID=<number> --relatedObjectType=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--objectType` | 路径 | `string` | 是 | 未声明 | objectType |
+| `--objectID` | 路径 | `number` | 是 | 未声明 | objectID |
+| `--relatedObjectType` | 路径 | `string` | 是 | 未声明 | relatedObjectType |
+| `--browseType` | 查询 | `string` | 否 | 未声明 | 候选对象筛选类型。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量。 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码。<br>也可使用 --page |
+
+`--objectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-relation-list"></a>
+
+#### `zentao relation list` · 查询关联对象
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao relation list --objectType=<string> --objectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--objectType` | 路径 | `string` | 是 | 未声明 | objectType |
+| `--objectID` | 路径 | `number` | 是 | 未声明 | objectID |
+
+`--objectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-relation-unlink"></a>
+
+#### `zentao relation unlink` · 删除关联对象
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao relation unlink --objectType=<string> --objectID=<number> --relatedObjectType=<string> --relatedObjectID=<number> --relationName=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--objectType` | 路径 | `string` | 是 | 未声明 | objectType |
+| `--objectID` | 路径 | `number` | 是 | 未声明 | objectID |
+| `--relatedObjectType` | 路径 | `string` | 是 | 未声明 | relatedObjectType |
+| `--relatedObjectID` | 路径 | `number` | 是 | 未声明 | relatedObjectID |
+| `--relationName` | 路径 | `string` | 是 | 未声明 | relationName |
+
+`--objectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-workflowgroup"></a>
+
+### workflowgroup · 项目流程
+
+项目流程管理，支持获取项目流程列表
+
+快捷用法与字段查询：
+
+```text
+zentao workflowgroup [列表参数]
+zentao workflowgroup props --format=json
+zentao help workflowgroup
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-workflowgroup-list) | 获取项目流程列表 |
+
+<a id="action-workflowgroup-list"></a>
+
+#### `zentao workflowgroup list` · 获取项目流程列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao workflowgroup list [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 项目流程状态筛选，默认 all<br>可选值：all（全部）；normal（正常）；pause（已停用） |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量。 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码。<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-resourcecalendar"></a>
+
+### resourcecalendar · 人力资源日历
+
+人力资源日历管理，支持查询人力资源日历
+
+快捷用法与字段查询：
+
+```text
+zentao resourcecalendar <id>
+zentao resourcecalendar props --format=json
+zentao help resourcecalendar
+```
+
+此模块没有默认 list；请明确指定下表中的操作。
+
+| 操作 | 用途 |
+| --- | --- |
+| [get](#action-resourcecalendar-get) | 查询人力资源日历 |
+
+<a id="action-resourcecalendar-get"></a>
+
+#### `zentao resourcecalendar get` · 查询人力资源日历
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao resourcecalendar get [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--type` | 查询 | `string` | 否 | `"company"` | 日历维度，默认 company<br>可选值：company（按部门）；person（按人员） |
+| `--mode` | 查询 | `string` | 否 | `"wait"` | 统计模式，默认 wait<br>可选值：wait（待处理）；done（已完成） |
+| `--accounts` | 查询 | `string` | 否 | 未声明 | 逗号分隔的用户账号；结果会继续按部门、项目和用户权限过滤。 |
+| `--projectID` | 查询 | `number` | 否 | 未声明 | 项目 ID；传入后仅查询该项目成员的日历数据。 |
+| `--depts` | 查询 | `string` | 否 | 未声明 | 逗号分隔的部门 ID；仅拥有查看所有人权限时生效。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-weekly"></a>
+
+### weekly · 项目周报
+
+项目周报管理，支持获取项目周报列表、创建项目周报、获取项目周报详情、编辑项目周报、删除项目周报
+
+快捷用法与字段查询：
+
+```text
+zentao weekly <id>
+zentao weekly [列表参数]
+zentao weekly props --format=json
+zentao help weekly
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-weekly-list) | 获取项目周报列表 |
+| [create](#action-weekly-create) | 创建项目周报 |
+| [get](#action-weekly-get) | 获取项目周报详情 |
+| [update](#action-weekly-update) | 编辑项目周报 |
+| [delete](#action-weekly-delete) | 删除项目周报 |
+
+<a id="action-weekly-list"></a>
+
+#### `zentao weekly list` · 获取项目周报列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao weekly list --projectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 查询 | `number` | 是 | 未声明 | 项目 ID。 |
+| `--browseType` | 查询 | `string` | 否 | `"all"` | 筛选类型，默认 all<br>可选值：all（全部）；bymodule（按目录）；bysearch（搜索） |
+| `--param` | 查询 | `string` | 否 | 未声明 | browseType=bymodule 时传目录 ID，browseType=bysearch 时传查询 ID。 |
+| `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
+| `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量。 |
+| `--pageID` | 查询 | `number` | 否 | 未声明 | 页码。<br>也可使用 --page |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-weekly-create"></a>
+
+#### `zentao weekly create` · 创建项目周报
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao weekly create --projectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 请求体 | `number` | 是 | 未声明 | 项目 ID。<br>格式：int32<br>必须为整数 |
+| `--reportModule` | 请求体 | `string` | 否 | 未声明 | 项目周报分类 ID，没有分类时可传 0。 |
+| `--title` | 请求体 | `string` | 否 | 未声明 | 周报标题。 |
+| `--templateID` | 请求体 | `number` | 否 | 未声明 | 报告模板 ID，不使用模板时传 0。<br>格式：int32<br>必须为整数 |
+| `--templateDesc` | 请求体 | `string` | 否 | 未声明 | 周报描述。 |
+| `--acl` | 请求体 | `string` | 否 | 未声明 | 访问控制(open 公开 \| private 私有)。 |
+| `--status` | 请求体 | `string` | 否 | 未声明 | 周报状态(draft 草稿 \| normal 正常)。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-weekly-get"></a>
+
+#### `zentao weekly get` · 获取项目周报详情
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao weekly get --reportID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--reportID` | 路径 | `number` | 是 | 未声明 | reportID |
+
+`--reportID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-weekly-update"></a>
+
+#### `zentao weekly update` · 编辑项目周报
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao weekly update --reportID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--reportID` | 路径 | `number` | 是 | 未声明 | reportID |
+| `--title` | 请求体 | `string` | 否 | 未声明 | 周报标题。 |
+| `--status` | 请求体 | `string` | 否 | 未声明 | 周报状态。 |
+| `--contentType` | 请求体 | `string` | 否 | 未声明 | 内容类型，默认 doc。 |
+| `--type` | 请求体 | `string` | 否 | 未声明 | 文档类型，默认 text。 |
+| `--content` | 请求体 | `string` | 否 | 未声明 | 周报 HTML 内容。 |
+| `--rawContent` | 请求体 | `string` | 否 | 未声明 | 周报原始内容。 |
+| `--comment` | 请求体 | `string` | 否 | 未声明 | 编辑备注。 |
+
+`--reportID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
+未提供的更新字段会从当前对象自动补全；上表必填请求体字段可由原值补齐。
+
+<a id="action-weekly-delete"></a>
+
+#### `zentao weekly delete` · 删除项目周报
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+```text
+zentao weekly delete --reportID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--reportID` | 路径 | `number` | 是 | 未声明 | reportID |
+
+`--reportID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
+
 <a id="module-db"></a>
 
 ### db · 数据库
+
+数据库管理，支持获取数据库表列表、执行SQL查询、获取数据库表结构
 
 快捷用法与字段查询：
 
@@ -6623,41 +9425,9 @@ zentao help db
 
 | 操作 | 用途 |
 | --- | --- |
-| [query](#action-db-query) | 执行 SQL 查询 |
 | [tables](#action-db-tables) | 获取数据库表列表 |
+| [query](#action-db-query) | 执行SQL查询 |
 | [table](#action-db-table) | 获取数据库表结构 |
-
-<a id="action-db-query"></a>
-
-#### `zentao db query` · 执行 SQL 查询
-
-最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
-
-返回查询结果行及分页；使用 raw: true 可获取原始响应中的 SQL、列信息和执行耗时。
-
-```text
-zentao db query --sql=<string> [选项]
-```
-
-请求体示例（数组使用 JSON，以保留元素类型）：
-
-```bash
-zentao db query --data '{"sql":"select * from zt_config","page":4,"limit":3}'
-```
-
-| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
-| --- | --- | --- | --- | --- | --- |
-| `--sql` | 请求体 | `string` | 是 | 未声明 | SQL 查询语句 |
-| `--page` | 请求体 | `number` | 否 | 未声明 | 页码，默认 1<br>必须为整数 |
-| `--limit` | 请求体 | `number` | 否 | 未声明 | 每页记录数，默认 100<br>必须为整数 |
-
-可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--data`；其他全局选项见[全局选项](#global-options)。
-
-这是带请求体的查询操作。可直接传 --data JSON 或使用 --params 中的正式字段名；当前不支持此类操作的 --data @- 或隐式标准输入。参数约束来自 SDK 定义，部分规则由服务端校验。
-
-此处 limit 是服务端请求体字段，建议放入 --data JSON。非 raw 输出时，平铺 --limit 会同时参与请求体组装和客户端截取；--data 中的 limit 覆盖请求体同名值，但不覆盖客户端 --limit。
-
-SDK 描述中的 raw: true 在 CLI 中对应 --format=raw，可查看原始响应的 SQL、列信息与执行耗时。
 
 <a id="action-db-tables"></a>
 
@@ -6672,6 +9442,39 @@ zentao db tables [选项]
 此操作没有业务参数。
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-db-query"></a>
+
+#### `zentao db query` · 执行SQL查询
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+返回查询结果行及分页；使用 raw: true 可获取原始响应中的 SQL、列信息和执行耗时。
+
+```text
+zentao db query --sql=<string> [选项]
+```
+
+请求体示例（数组使用 JSON，以保留元素类型）：
+
+```bash
+zentao db query --data '{"sql":"SELECT id, account FROM zt_user","page":1,"limit":100,"count":true}'
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--sql` | 请求体 | `string` | 是 | 未声明 | 只读 SQL 语句，仅支持 SELECT 查询。 |
+| `--page` | 请求体 | `number` | 否 | 未声明 | 页码，默认 1。<br>格式：int32<br>必须为整数 |
+| `--limit` | 请求体 | `number` | 否 | 未声明 | 每页条数，默认 100。<br>格式：int32<br>必须为整数 |
+| `--count` | 请求体 | `boolean` | 否 | 未声明 | 是否统计总条数，默认 true。 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--data`；其他全局选项见[全局选项](#global-options)。
+
+这是带请求体的查询操作。可直接传 --data JSON 或使用 --params 中的正式字段名；当前不支持此类操作的 --data @- 或隐式标准输入。参数约束来自 SDK 定义，部分规则由服务端校验。
+
+此处 limit 是服务端请求体字段，建议放入 --data JSON。非 raw 输出时，平铺 --limit 会同时参与请求体组装和客户端截取；--data 中的 limit 覆盖请求体同名值，但不覆盖客户端 --limit。
+
+SDK 描述中的 raw: true 在 CLI 中对应 --format=raw，可查看原始响应的 SQL、列信息与执行耗时。
 
 <a id="action-db-table"></a>
 
@@ -6696,7 +9499,7 @@ zentao db table --table=<string> [选项]
 
 ### knowledgelib · 知识库
 
-需部署商业知识库扩展，仅返回已发布且当前用户可访问的知识库。
+知识库管理，支持获取 AI 知识库列表
 
 快捷用法与字段查询：
 
@@ -6708,13 +9511,13 @@ zentao help knowledgelib
 
 | 操作 | 用途 |
 | --- | --- |
-| [list](#action-knowledgelib-list) | 获取知识库列表 |
+| [list](#action-knowledgelib-list) | 获取 AI 知识库列表 |
 
 <a id="action-knowledgelib-list"></a>
 
-#### `zentao knowledgelib list` · 获取知识库列表
+#### `zentao knowledgelib list` · 获取 AI 知识库列表
 
-最低禅道版本：`biz13.7` / `max8.7` / `ipd5.7`。
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
 
 ```text
 zentao knowledgelib list [选项]
@@ -6733,7 +9536,7 @@ zentao knowledgelib list [选项]
 
 ### knowledge · 知识
 
-需部署商业知识库扩展，支持浏览知识、向量搜索、标题或正文关键词搜索和读取已保存正文。
+知识管理，支持获取 AI 知识库内的知识列表、在多个 AI 知识库内向量搜索、按关键词搜索 AI 知识、获取 AI 知识详情
 
 快捷用法与字段查询：
 
@@ -6746,16 +9549,16 @@ zentao help knowledge
 
 | 操作 | 用途 |
 | --- | --- |
-| [list](#action-knowledge-list) | 获取知识库内知识列表 |
-| [embeddingsSearch](#action-knowledge-embeddingssearch) | 多知识库向量搜索 |
-| [search](#action-knowledge-search) | 多知识库关键词搜索 |
-| [get](#action-knowledge-get) | 获取知识详细内容 |
+| [list](#action-knowledge-list) | 获取 AI 知识库内的知识列表 |
+| [embeddingsSearch](#action-knowledge-embeddingssearch) | 在多个 AI 知识库内向量搜索 |
+| [search](#action-knowledge-search) | 按关键词搜索 AI 知识 |
+| [get](#action-knowledge-get) | 获取 AI 知识详情 |
 
 <a id="action-knowledge-list"></a>
 
-#### `zentao knowledge list` · 获取知识库内知识列表
+#### `zentao knowledge list` · 获取 AI 知识库内的知识列表
 
-最低禅道版本：`biz13.7` / `max8.7` / `ipd5.7`。
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
 
 返回当前用户可见的知识条目，按本地 ID 降序排列；不支持标题关键词查询。
 
@@ -6777,9 +9580,9 @@ zentao knowledge list --libID=<number> [选项]
 
 <a id="action-knowledge-embeddingssearch"></a>
 
-#### `zentao knowledge embeddingsSearch` · 多知识库向量搜索
+#### `zentao knowledge embeddingsSearch` · 在多个 AI 知识库内向量搜索
 
-最低禅道版本：`biz13.7` / `max8.7` / `ipd5.7`。
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
 
 仅检索已有索引，需 ai.searchknowledgelib 权限。按匹配度降序返回片段，不分页；用 knowledgeID 获取完整正文，chunkID 仅标识片段。
 
@@ -6810,9 +9613,9 @@ zentao knowledge embeddingsSearch --data '{"keyword":"如何处理接口请求�
 
 <a id="action-knowledge-search"></a>
 
-#### `zentao knowledge search` · 多知识库关键词搜索
+#### `zentao knowledge search` · 按关键词搜索 AI 知识
 
-最低禅道版本：`biz13.7` / `max8.7` / `ipd5.7`。
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
 
 需 ai.searchknowledgelib 权限，按字面文本匹配 title 或已保存的 content，不依赖向量索引。标题与正文分别匹配，单个关键词不能跨字段拼接。返回完整正文及 contentType，正文为空或 null 时返回空字符串；每条知识只返回一次，按知识 ID 降序分页。
 
@@ -6842,9 +9645,9 @@ zentao knowledge search --data '{"keywords":["登录","超时"],"libIDs":[12,18]
 
 <a id="action-knowledge-get"></a>
 
-#### `zentao knowledge get` · 获取知识详细内容
+#### `zentao knowledge get` · 获取 AI 知识详情
 
-最低禅道版本：`biz13.7` / `max8.7` / `ipd5.7`。
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
 
 返回已保存的完整正文及来源信息，不触发文件提取、知识同步或索引更新。按 contentType 解释正文，尚未保存正文时 content 可为空。
 
@@ -6859,3 +9662,105 @@ zentao knowledge get --knowledgeID=<number> [选项]
 `--knowledgeID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-space"></a>
+
+### space · 代码库空间
+
+需部署代码库 API 2.0 实现，仅返回当前用户可访问的未删除空间。
+
+快捷用法与字段查询：
+
+```text
+zentao space [列表参数]
+zentao space props --format=json
+zentao help space
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-space-list) | 获取代码库空间列表 |
+
+<a id="action-space-list"></a>
+
+#### `zentao space list` · 获取代码库空间列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+需 space.browse 权限，按空间 ID 降序排列；先按当前用户权限过滤，再分页。
+
+```text
+zentao space list [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--pageID` | 查询 | `number` | 否 | `1` | 页码，从 1 开始的正整数<br>也可使用 --page |
+| `--recPerPage` | 查询 | `number` | 否 | `20` | 每页条数，范围 1～100 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="module-repo"></a>
+
+### repo · 代码库
+
+需部署代码库 API 2.0 实现，支持查询空间代码库和创建 GitFox 代码库。
+
+快捷用法与字段查询：
+
+```text
+zentao repo [列表参数]
+zentao repo props --format=json
+zentao help repo
+```
+
+| 操作 | 用途 |
+| --- | --- |
+| [list](#action-repo-list) | 获取空间下的代码库列表 |
+| [create](#action-repo-create) | 创建代码库 |
+
+<a id="action-repo-list"></a>
+
+#### `zentao repo list` · 获取空间下的代码库列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+需 repo.maintain 权限及空间访问权限，独立授权空间另需空间内的 repo.maintain 权限。仅返回未删除、非导入中且当前用户可访问的代码库；url.http、url.ssh 可能缺省，克隆地址保持服务端原值。
+
+```text
+zentao repo list --spaceID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--spaceID` | 路径 | `number` | 是 | 未声明 | 代码库空间 ID，正整数 |
+| `--pageID` | 查询 | `number` | 否 | `1` | 页码，从 1 开始的正整数<br>也可使用 --page |
+| `--recPerPage` | 查询 | `number` | 否 | `20` | 每页条数，范围 1～100 |
+| `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序方式<br>可选值：id_asc（ID 升序）；id_desc（ID 降序）；name_asc（名称升序）；name_desc（名称降序） |
+
+`--spaceID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-repo-create"></a>
+
+#### `zentao repo create` · 创建代码库
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+需配置 GitFox，具备 repo.createRepo 全局权限、空间及关联产品访问权限；私有空间或独立授权空间另需空间内的 repo.create 权限，独立授权空间还需 repo.createRepo 权限。以当前 Token 用户创建，默认 main 分支并初始化 README；返回 id，不返回克隆地址。超时或后续步骤失败时远端代码库可能已创建，重试前应查询目标空间核对。
+
+```text
+zentao repo create --space=<number> --product=<integer[]> --name=<string> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--space` | 请求体 | `number` | 是 | 未声明 | 代码库空间 ID，使用 JSON 数字；字段名为 space<br>必须为整数<br>最小值：1 |
+| `--product` | 请求体 | `integer[]` | 是 | 未声明 | 关联产品 ID 的非空正整数数组，例如 [12]；不接受字符串元素或逗号分隔字符串<br>最少元素数：1<br>数组元素类型：integer<br>数组元素最小值：1 |
+| `--name` | 请求体 | `string` | 是 | 未声明 | 去除首尾空白后，以英文字母或下划线开头，后续仅允许英文字母、数字、下划线、连字符和点<br>最小长度：1 |
+| `--desc` | 请求体 | `string` | 否 | `""` | 代码库描述；可选字段使用默认值时应省略，不传 null |
+| `--acl` | 请求体 | `string` | 否 | `"open"` | 访问权限，private 时 members 必须非空<br>可选值：open（公开）；private（私有） |
+| `--members` | 请求体 | `string[]` | 否 | `[]` | 成员账号数组，账号须存在、未删除且未关闭；acl=private 时必填且非空，服务端自动加入当前创建者<br>数组元素类型：string<br>数组元素最小长度：1 |
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--data`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
