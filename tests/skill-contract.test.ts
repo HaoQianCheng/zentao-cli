@@ -206,7 +206,77 @@ function contradictoryFilters(command: string): string[] {
     return issues;
 }
 
+/** Check concrete enum/array literals; leave placeholders and stdin examples opaque. */
+function invalidLiteralValues(words: string[], module: ModuleDefinition, action: ModuleAction): string[] {
+    const params = getModuleActionParams(module.name, action.name);
+    const values: Record<string, unknown> = {};
+    let body: Record<string, unknown> = {};
+    for (let i = 2; i < words.length; i++) {
+        const option = words[i].match(/^--([\w.-]+)(?:=([\s\S]*))?$/);
+        if (!option) continue;
+        const [, name, inline] = option;
+        const raw = inline ?? words[i + 1];
+        if (raw === undefined || raw.startsWith('--')) continue;
+        if (name === 'data' || name === 'params') {
+            if (!raw.startsWith('{')) continue;
+            const json = JSON.parse(raw);
+            if (name === 'data') body = json;
+            else { Object.assign(values, json); body = json.data ?? body; }
+            continue;
+        }
+        const param = params.find(param => param.name === name);
+        if (!param) continue;
+        values[name] = raw.includes('<') ? raw : param.type === 'array' ? raw.split(',')
+            : param.type === 'number' ? Number(raw)
+                : param.type === 'boolean' ? raw === 'true' : raw;
+    }
+    const issues: string[] = [];
+    const properties = action.requestBody?.schema.properties as Record<string, { items?: { type?: string } }> | undefined;
+    for (const param of params) {
+        const value = param.role === 'body' && Object.hasOwn(body, param.name) ? body[param.name] : values[param.name];
+        if (value === undefined) continue;
+        const concrete = (value: unknown) => typeof value !== 'string' || (!value.includes('<') && value !== '...');
+        const items = Array.isArray(value) ? value : [value];
+        if (param.options?.length && items.some(item => concrete(item) && !param.options!.some(option => option.value === item))) {
+            issues.push(`${param.name}: invalid enum value ${JSON.stringify(value)}`);
+        }
+        if (param.type !== 'array') continue;
+        if (!Array.isArray(value)) {
+            if (concrete(value)) issues.push(`${param.name}: expected JSON array`);
+            continue;
+        }
+        const itemType = properties?.[param.name]?.items?.type;
+        if (itemType && value.some(item => concrete(item) && (itemType === 'integer' ? !Number.isSafeInteger(item) : typeof item !== itemType))) {
+            issues.push(`${param.name}: expected ${itemType} array elements`);
+        }
+    }
+    return issues;
+}
+
 describe('bundled Skill command contracts', () => {
+    test('literal checks catch stale enums and stringified numeric arrays', () => {
+        for (const raw of [
+            'zentao my tasks --browseType=assignedtome',
+            'zentao story --browseType=invalid',
+            'zentao repo create --product=12,13',
+            `zentao repo create --data '{"product":["12"]}'`,
+        ]) {
+            const words = shellWords(raw);
+            const { module, action } = resolveDocumentedAction(words)!;
+            expect(invalidLiteralValues(words, module, action), raw).not.toEqual([]);
+        }
+        for (const raw of [
+            'zentao my tasks --browseType=assignedTo',
+            `zentao repo create --data '{"product":[12,13]}'`,
+            'zentao my tasks --browseType=<browseType>',
+            'zentao task create --pri=<优先级>',
+        ]) {
+            const words = shellWords(raw);
+            const { module, action } = resolveDocumentedAction(words)!;
+            expect(invalidLiteralValues(words, module, action), raw).toEqual([]);
+        }
+    });
+
     test('documented ID shorthand satisfies only the first path ID', () => {
         for (const raw of [
             'zentao doc myDocs 1',
@@ -241,6 +311,9 @@ describe('bundled Skill command contracts', () => {
 
                 const filters = contradictoryFilters(command.raw);
                 if (filters.length) issues.push(`${location} contradictory filter ${filters.join(', ')}: ${command.raw}`);
+
+                const values = invalidLiteralValues(words, resolved.module, resolved.action);
+                if (values.length) issues.push(`${location} ${values.join('; ')}: ${command.raw}`);
             } catch (error) {
                 issues.push(`${location} ${(error as Error).message}: ${command.raw}`);
             }
@@ -289,5 +362,16 @@ describe('bundled Skill command contracts', () => {
         const create = await runCliWithoutAuth(['execution', 'create', '--help']);
         expect(create.exitCode).toBe(0);
         expect(create.stdout).not.toContain('--pick <fields>');
+    });
+
+    test('get help only advertises ID shorthand when the action declares a path ID', async () => {
+        const calendar = await runCliWithoutAuth(['resourcecalendar', '--help']);
+        expect(calendar.exitCode).toBe(0);
+        expect(calendar.stdout).toContain('zentao resourcecalendar get [选项]');
+        expect(calendar.stdout).not.toContain('<id>');
+        expect(calendar.stdout).not.toContain('--id');
+        const product = await runCliWithoutAuth(['product', '--help']);
+        expect(product.stdout).toContain('zentao product <id> [选项]');
+        expect(product.stdout).toContain('--id <id>');
     });
 });

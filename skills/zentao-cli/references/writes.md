@@ -37,6 +37,42 @@ CLI 对 `type=update` 的操作启用补全：当该模块存在同路径的详�
 - 没有匹配详情接口的更新不会自动补全，例如项目、版本、发布、待办的更新。按帮助准备必要字段；需要现值时从所属列表或其他受支持的查询获取。
 - `change`、`resolve`、`start`、`finish` 等状态动作不使用更新补全；按各自动作的必填项提交。
 
+命名更新也按路径匹配详情，例如 `workflow updateFlow` 会先调用 `getFlow`，保留未显式修改的导航和位置字段：
+
+```bash
+zentao workflow updateFlow --flowID=5 --name="新的工作流名称"
+```
+
+## 代码库、SSH 公钥与对象关联
+
+代码库接口需站点已配置 GitFox，并具备操作、空间及产品访问权限。先查询可用空间和目标空间下的代码库，再用实际空间、产品 ID 创建：
+
+```bash
+zentao space list --recPerPage=20 --format=json
+zentao repo list --spaceID=10 --recPerPage=20 --format=json
+zentao repo create --data '{"space":10,"product":[12,13],"name":"demo_repo"}'
+```
+
+`space` 是正整数，`product` 是非空正整数数组。不能用逗号分隔字符串或字符串数组代替；MCP 同样使用 `params.product: [12,13]`，顶层 `product` 数字简写不适用于此动作。私有代码库使用 `acl: "private"`，并提供非空 `members` 账号数组。创建返回 ID；克隆地址需从目标空间的代码库列表读取 `url.http` / `url.ssh`，字段可能缺省。创建超时或后续步骤失败时，先查列表核对是否已经创建，再决定是否重试。
+
+用户要求添加 SSH 公钥时，使用用户指定的完整单行公钥文本，替换下方占位内容；不提交私钥：
+
+```bash
+zentao my createSSH --data '{"name":"developer","publicKey":"ssh-ed25519 <完整公钥内容> developer@example.com"}'
+```
+
+GitFox 负责公钥完整性及重复检查。该操作修改当前 Token 用户的密钥，不是查询；MCP 只读模式会拒绝执行。
+
+对象关联有多个路径参数，先查已有关系或候选对象；解除关联时按实际结果填写关系名与两个对象 ID：
+
+```bash
+zentao relation list --objectType=story --objectID=42 --format=json
+zentao relation candidates --objectType=story --objectID=42 --relatedObjectType=bug --format=json
+zentao relation unlink --objectType=story --objectID=42 --relatedObjectType=bug --relatedObjectID=43 --relationName='<实际关系名>' --yes
+```
+
+`--id` 只能替代 `objectID`，不能代替 `relatedObjectID`。SDK 0.8.0 的 `relation link` 将 `relation` 声明为数组，但说明和请求示例使用对象映射；在上游契约统一前，不据此拼接新增关联请求。
+
 ## 常用状态操作
 
 ```bash

@@ -58,7 +58,7 @@ const commandNotes: Record<string, { text: string; examples: string[] }> = {
     'add-mcp': { text: '使用已登录账号配置目标 Agent 的本地 stdio MCP 服务；HTTP MCP 需要手动配置。省略 agent 时交互选择，all 表示全部目标。多数目标写入包含服务地址、账号和 Token 的配置；Cherry Studio 打印手动添加说明。包含注释或尾逗号的 JSONC 配置会提示手动处理。支持的 Agent 见参数表。', examples: ['zentao add-mcp codex', 'zentao add-mcp cursor'] },
     mcp: { text: '默认使用 stdio，由客户端管理进程并使用本地登录或环境凭证。--transport http 启动无状态 Streamable HTTP 服务，默认监听 127.0.0.1:9090；--url（回退到 ZENTAO_URL）固定一个禅道站点，不使用本地账号。--url、--host、--port 仅适用于 HTTP 模式，端口为 1–65535。每个 POST /mcp 请求须单独提供 token 或 Authorization: Bearer 禅道 Token，不能同时提供；不接受密码、OAuth、查询参数凭证或浏览器 Origin。GET /healthz 无需认证，GET/DELETE /mcp 返回 405，不提供旧 /sse。HTTP 模式不提供账号切换，zentao_profile 的 account 为 null；运行需要 Node.js 18.14.1+ 或 Bun，远程访问应使用 HTTPS 反向代理。两种模式均支持 --read-only、--modules、--split-tools 和全局 --timeout、--insecure。完整部署与客户端示例见 [MCP 使用说明](cli-usage.md#mcp-服务)。', examples: ['zentao mcp', 'zentao --config ./zentao.json mcp', 'zentao mcp --read-only --modules product,story,task,bug', 'zentao mcp --split-tools --modules product,story,task,bug', 'zentao mcp --transport http --url https://zentao.example.com', 'zentao --timeout 15000 mcp --transport http --host 127.0.0.1 --port 9090 --url https://zentao.example.com --read-only'] },
     ls: { text: '通用列表入口，list 是此一级命令的别名。需要模块存在默认 list；业务参数与对应模块 list 的参数相同。建议日常使用 zentao <模块>。', examples: ['zentao ls product', 'zentao list product'] },
-    get: { text: '通用详情入口，模块需支持 get。首个 ID 使用位置参数；额外路径参数可通过 --params 提供。', examples: ['zentao get bug 42', 'zentao get product 1 --pick=id,name'] },
+    get: { text: '通用详情入口，模块需支持 get。仅在操作声明路径 ID 时提供位置 ID；额外参数使用 --key=value 或 --params。', examples: ['zentao get bug 42', 'zentao get product 1 --pick=id,name', 'zentao get resourcecalendar --type=person --projectID=1'] },
     create: { text: '通用创建入口，模块需支持 create；字段与对应模块 create 的参数相同。', examples: ["zentao create product --name='团队知识库'"] },
     update: { text: '通用更新入口，模块需支持 update；可使用数字位置参数或 --id。未提供的字段按更新规则自动补全。', examples: ["zentao update product --id=1 --name='团队知识库新版'"] },
     delete: { text: '通用删除入口，模块需支持 delete；确认与批量规则同模块删除操作。', examples: ['zentao delete product --id=1,2 --yes'] },
@@ -156,7 +156,11 @@ for (const mod of modules) {
     if (mod.description) add(mod.description);
     const shortcuts = ['zentao ' + mod.name + ' props --format=json', 'zentao help ' + mod.name];
     if (mod.actions.some((action) => action.name === 'list')) shortcuts.unshift('zentao ' + mod.name + ' [列表参数]');
-    if (mod.actions.some((action) => action.name === 'get')) shortcuts.unshift('zentao ' + mod.name + ' <id>');
+    const getAction = mod.actions.find((action) => action.name === 'get');
+    if (getAction) {
+        const hasId = Object.keys(getAction.pathParams ?? {}).some(name => name.endsWith('ID') && name !== 'scopeID');
+        shortcuts.unshift('zentao ' + mod.name + (hasId ? ' <id>' : ' get [查询参数]'));
+    }
     add('快捷用法与字段查询：', fence(shortcuts.join('\n')));
     if (!mod.actions.some((action) => action.name === 'list')) add('此模块没有默认 list；请明确指定下表中的操作。');
     add(table(['操作', '用途'], mod.actions.map((action) => [

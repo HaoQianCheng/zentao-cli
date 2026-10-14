@@ -8,7 +8,7 @@ import { executeModuleCommand } from '../modules/executor.js';
 import { ZentaoError } from '../errors.js';
 import type { AuthProvider } from './server.js';
 import { withRequestSignal } from '../api/index.js';
-import { normalizeToolParams } from './params.js';
+import { getScopeAliasTarget, normalizeToolParams } from './params.js';
 import { listOutputSchema, outputSchema, toolError, toolResult } from './results.js';
 
 export interface McpToolOptions {
@@ -51,7 +51,7 @@ function buildInputSchema(mod: ModuleDefinition) {
         shape.id = z.number().int().nonnegative().optional().describe('首个路径 ID 简写；多 ID 用 params');
     }
     for (const name of ['product', 'project', 'execution']) {
-        if (names.has(name) || names.has(`${name}ID`) || parameters.some(param => param.name === 'scope' && param.options?.some(option => option.value === `${name}s`))) {
+        if (mod.actions.some(action => getScopeAliasTarget(mod, action, name))) {
             shape[name] = z.number().int().nonnegative().optional().describe(`${name}ID 或 scope/scopeID 简写，冲突时报错`);
         }
     }
@@ -71,11 +71,12 @@ function buildInputSchema(mod: ModuleDefinition) {
 
 /** Examples use typed placeholders, not real object IDs or ready-to-submit business data. */
 function actionExample(mod: ModuleDefinition, action: ModuleAction, splitTools?: boolean) {
+    const bodyExample = action.requestBody?.schema.example as Record<string, unknown> | undefined;
     const params = Object.fromEntries(getModuleActionParams(mod.name, action.name)
         .filter(param => param.required && param.defaultValue === undefined)
-        .map(param => [param.name, param.type === 'array' ? [] : param.options?.[0]?.value
+        .map(param => [param.name, (param.role === 'body' ? bodyExample?.[param.name] : undefined) ?? (param.type === 'array' ? [] : param.options?.[0]?.value
             ?? (param.type === 'number' || (param.role === 'path' && param.name.endsWith('ID')) ? 1
-                : param.type === 'boolean' ? false : param.type === 'object' ? {} : `<${param.name}>`)]));
+                : param.type === 'boolean' ? false : param.type === 'object' ? {} : `<${param.name}>`))]));
     return {
         name: `zentao_${mod.name}${splitTools ? isReadAction(action) ? '_read' : '_write' : ''}`,
         arguments: { action: action.name, ...(Object.keys(params).length ? { params } : {}) },

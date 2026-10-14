@@ -64,7 +64,8 @@ zentao profile 'admin@https://zentao.example.com'
 | 意图 | 命令形式 |
 |------|----------|
 | 列表（仅支持默认列表的模块） | `zentao <module> [范围参数]` |
-| 详情（仅支持 get 的模块） | `zentao <module> <id>` |
+| 详情（get 声明路径 ID） | `zentao <module> <id>` |
+| 无路径 ID 的查询 | `zentao resourcecalendar get --type=person` |
 | 创建 / 更新 / 删除 | `zentao <module> create` / `zentao <module> update <id>` / `zentao <module> delete <id>` |
 | 状态流转或命名操作 | `zentao <module> <action> [参数]` |
 | 操作参数、必填项、最低版本 | `zentao <module> <action> --help` |
@@ -73,6 +74,7 @@ zentao profile 'admin@https://zentao.example.com'
 `props` 不是写入字段清单，也不代表当前站点的动态选项。创建、更新、状态流转都以操作帮助为准；先读懂参数用途，再选值。
 
 - 业务字段优先使用 `--field=value`，保留帮助中的大小写。复杂对象、数组或长文本见 [references/writes.md](references/writes.md)。
+- 代码库创建、SSH 公钥和对象关联的参数示例也见 [references/writes.md](references/writes.md)；数字数组使用 JSON。
 - 不要推断每个模块都有 CRUD。`doc`、`my` 无默认列表，必须选择命名操作。
 - 多个路径参数要分别传入；位置 ID / `--id` 仅代表首个路径 ID，不能代替后续 ID。
 - 不知道 ID 时先按产品、项目或执行查找，出现同名对象再澄清，不能套用示例 ID。
@@ -95,6 +97,7 @@ zentao build --project=5
 zentao my tasks --pick=id,name,status
 zentao my bugs --pick=id,title,status
 zentao my todos
+zentao my auditPlans --browseType=mychecking
 zentao doc myDocs --spaceID=1 --libID=2
 ```
 

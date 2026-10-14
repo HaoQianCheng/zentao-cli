@@ -293,7 +293,8 @@ export function showModuleHelp(mod: ModuleDefinition): void {
     }
     const getByIdAction = getAction(mod, 'get');
     if (getByIdAction) {
-        cmds.push({ cmd: `zentao ${n} <id> [选项]`, desc: getActionDescription(getByIdAction) });
+        const hasId = Object.keys(getByIdAction.pathParams ?? {}).some(name => name.endsWith('ID') && name !== 'scopeID');
+        cmds.push({ cmd: `zentao ${n} ${hasId ? '<id>' : 'get'} [选项]`, desc: getActionDescription(getByIdAction) });
     }
     cmds.push({ cmd: `zentao ${n} props [选项]`, desc: '获取对象属性定义' });
     const createAction = getAction(mod, 'create');
@@ -386,8 +387,8 @@ export function showModuleHelp(mod: ModuleDefinition): void {
     commonOpts.push({ name: 'params', placeholder: 'json', description: 'API 调用参数（JSON 对象），可替代单独的 --key=value 传参' });
     if (deleteAction) commonOpts.push({ name: 'yes', description: '跳过确认提示，适用于 delete 操作' });
     commonOpts.push({ name: 'silent', description: '静默模式，不输出任何结果' });
-    if (getByIdAction || updateAction || deleteAction || actions.length > 0) {
-        commonOpts.push({ name: 'id', placeholder: 'id', description: '对象 ID，适用于 get/update/delete/状态流转操作' });
+    if (mod.actions.some(action => Object.keys(action.pathParams ?? {}).some(name => name.endsWith('ID') && name !== 'scopeID'))) {
+        commonOpts.push({ name: 'id', placeholder: 'id', description: '首个路径 ID 的简写，多个路径 ID 需分别提供' });
     }
     commonOpts.push({ name: 'format', placeholder: 'type', description: '输出格式，支持 markdown、json、raw' });
 

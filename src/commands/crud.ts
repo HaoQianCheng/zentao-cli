@@ -21,15 +21,16 @@ export function registerCrudCommands(program: Command): void {
         await runCrudCommand(program, moduleName, 'list', opts, args);
     });
 
-    // zentao get <module> <id>
+    // zentao get <module> [id] [options]
     const getCmd = program
         .command('get')
         .description('获取单个对象')
         .argument('<module>', '模块名称，例如 bug')
-        .argument('<id>', '对象 ID');
+        .argument('[args...]', '对象 ID（按操作要求）和其他参数');
     addDataOptions(getCmd);
-    getCmd.action(async (moduleName: string, id: string, opts: ModuleActionOptions) => {
-        await runCrudCommand(program, moduleName, 'get', opts, [id]);
+    getCmd.allowUnknownOption(true);
+    getCmd.action(async (moduleName: string, args: string[], opts: ModuleActionOptions) => {
+        await runCrudCommand(program, moduleName, 'get', opts, args);
     });
 
     // zentao create <module>

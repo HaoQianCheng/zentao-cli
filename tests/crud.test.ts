@@ -7,7 +7,7 @@ describe('CLI command entry points', () => {
     let directory: string;
     let configFile: string;
     let server: ReturnType<typeof Bun.serve>;
-    let requests: Array<{ method: string; path: string; query: Record<string, string> }>;
+    let requests: Array<{ method: string; path: string; query: Record<string, string>; body?: unknown }>;
 
     beforeEach(() => {
         directory = mkdtempSync(join(tmpdir(), 'zentao-cli-crud-'));
@@ -15,18 +15,22 @@ describe('CLI command entry points', () => {
         requests = [];
         server = Bun.serve({
             hostname: '127.0.0.1', port: 0,
-            fetch(request) {
+            async fetch(request) {
                 const url = new URL(request.url);
                 if (url.searchParams.get('mode') === 'getconfig') {
-                    return Response.json({ version: '22.5' });
+                    return Response.json({ version: '22.7' });
                 }
                 const path = url.pathname.replace('/api.php/v2', '');
-                requests.push({ method: request.method, path, query: Object.fromEntries(url.searchParams) });
+                requests.push({ method: request.method, path, query: Object.fromEntries(url.searchParams),
+                    ...(request.method === 'POST' ? { body: await request.json() } : {}) });
                 return Response.json({
                     status: 'success',
                     product: { id: Number(path.split('/').at(-1)), name: 'Product' },
                     products: [{ id: 1, name: 'First' }, { id: 2, name: 'Second' }],
                     bugs: [],
+                    rows: [],
+                    id: 7,
+                    resourceCalendars: { developer: { tasks: [] } },
                 });
             },
         });
@@ -103,6 +107,34 @@ describe('CLI command entry points', () => {
         const result = await run(['ls', 'bug', '--product=1']);
         expect(result.exitCode).toBe(0);
         expect(requests.map(({ path }) => path)).toEqual(['/products/1/bugs']);
+    });
+
+    test('generic get supports queries without a path ID and preserves dynamic options', async () => {
+        const options = ['--type=person', '--projectID=1', '--accounts=developer'];
+        const direct = await run(['resourcecalendar', 'get', ...options]);
+        const shortcut = await run(['get', 'resourcecalendar', ...options]);
+        expect(shortcut).toEqual(direct);
+        expect(shortcut.exitCode).toBe(0);
+        expect(JSON.parse(shortcut.stdout)).toEqual({ developer: { tasks: [] } });
+        expect(requests).toHaveLength(2);
+        expect(requests[0]).toEqual(requests[1]);
+        expect(requests[0]).toEqual({ method: 'GET', path: '/resourcecalendars', query: { type: 'person', mode: 'wait', projectID: '1', accounts: 'developer' } });
+    });
+
+    test('generic get still requires the ID declared by the selected action', async () => {
+        const result = await run(['get', 'product']);
+        expect(result.exitCode).toBe(1);
+        expect(JSON.parse(result.stderr).error.code).toBe('2003');
+        expect(requests).toEqual([]);
+    });
+
+    test('JSON examples preserve repository ID arrays and an explicit false SQL count', async () => {
+        const repo = { space: 10, product: [12, 13], name: 'demo_repo' };
+        expect((await run(['repo', 'create', '--data', JSON.stringify(repo)])).exitCode).toBe(0);
+        expect(requests[0]).toMatchObject({ method: 'POST', path: '/repos', body: repo });
+        const query = { sql: 'SELECT id, account FROM zt_user', page: 1, limit: 20, count: false };
+        expect((await run(['db', 'query', '--params', JSON.stringify(query)])).exitCode).toBe(0);
+        expect(requests[1]).toMatchObject({ method: 'POST', path: '/db/query', body: query });
     });
 
     test('ls refuses unsupported automatic pagination before requesting a page', async () => {

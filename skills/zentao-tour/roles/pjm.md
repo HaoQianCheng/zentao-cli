@@ -19,10 +19,10 @@ zentao execution --browseType=all --filter='project=<项目ID>' --pick=id,name,t
 
 ## 需要新建时，明确模型和日期
 
-说明项目名称、起止日期、管理方式和关联产品。`scrum` 是敏捷项目示例，不替用户已有的瀑布或看板项目改模型。数组字段用 JSON；下文 `12` 是示例产品 ID，必须替换为实际选定产品。
+说明项目名称、起止日期、管理方式和关联产品。`scrum` 是敏捷项目示例，不替用户已有的瀑布或看板项目改模型。数组字段用 JSON；这两个创建动作的 `products` 声明为字符串数组，下文 `"12"` 是示例产品 ID，必须替换为实际选定产品。
 
 ```bash
-zentao project create --name="<项目名称>" --model=scrum --begin=<YYYY-MM-DD> --end=<YYYY-MM-DD> --workflowGroup=0 --data '{"products":[12]}'
+zentao project create --name="<项目名称>" --model=scrum --begin=<YYYY-MM-DD> --end=<YYYY-MM-DD> --workflowGroup=0 --data '{"products":["12"]}'
 ```
 
 当前 CLI 将 `workflowGroup` 定义为必填：开源版示例用 `0`；付费版应使用实际项目流程 ID，不照抄 `0`。服务器支持时可用 `zentao workflow --help`、`zentao workflow` 查看流程；不支持时使用用户提供或界面中核实的配置，不能编造 ID。
@@ -30,7 +30,7 @@ zentao project create --name="<项目名称>" --model=scrum --begin=<YYYY-MM-DD>
 拿到真实项目 ID 后，创建迭代：
 
 ```bash
-zentao execution create --project=<项目ID> --name="Sprint 1" --type=sprint --begin=<YYYY-MM-DD> --end=<YYYY-MM-DD> --data '{"products":[12]}'
+zentao execution create --project=<项目ID> --name="Sprint 1" --type=sprint --begin=<YYYY-MM-DD> --end=<YYYY-MM-DD> --data '{"products":["12"]}'
 ```
 
 执行并非都叫 sprint。按 `zentao execution create --help` 与项目模型选用 `sprint`、`stage` 或 `kanban`；阶段还可用 `parent` 指定父阶段、`attribute` 指定阶段类型。用户使用 IPD 时，创建阶段必须显式传 `type=stage`；仅在确实需要时展开这些字段。

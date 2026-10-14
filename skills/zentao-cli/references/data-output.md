@@ -19,6 +19,21 @@ CLI JSON 结构随操作类型变化：
 
 同时检查退出码、stderr 和 JSON 内容。批量请求使用另一种汇总结构，见 [writes.md](writes.md)。
 
+`resourcecalendar get` 没有路径 ID，使用查询参数选择日历；通用 `get` 入口也可省略 ID：
+
+```bash
+zentao resourcecalendar get --type=person --projectID=1 --accounts=developer --format=json
+zentao get resourcecalendar --type=person --projectID=1 --format=json
+```
+
+`db query` 的 `page`、`limit` 是请求体字段，用 `--params` 可避免与 CLI 本地分页、截取选项混淆；`count=false` 会原样发送：
+
+```bash
+zentao db query --params '{"sql":"SELECT id, account FROM zt_user","page":1,"limit":20,"count":false}' --format=json
+```
+
+仅在用户要求并具备 SQL 查询权限时使用。省略总数后不要把当前页行数当作全量统计；MCP 只读模式按 HTTP 方法筛选，会隐藏这个 POST 查询操作。
+
 ## 当前页的数据处理
 
 范围参数及接口声明的 `browseType` 等控制服务端查询；`--filter`、`--search`、`--sort`、`--limit`、`--pick` 在收到当前页后处理，不能扩大服务器已返回的集合。

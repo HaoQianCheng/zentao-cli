@@ -832,15 +832,15 @@ zentao list product
 获取单个对象
 
 ```text
-zentao get [options] <module> <id>
+zentao get [options] <module> [args...]
 ```
 
-通用详情入口，模块需支持 get。首个 ID 使用位置参数；额外路径参数可通过 --params 提供。
+通用详情入口，模块需支持 get。仅在操作声明路径 ID 时提供位置 ID；额外参数使用 --key=value 或 --params。
 
 | 位置参数 | 必填 | 说明 |
 | --- | --- | --- |
 | `module` | 是 | 模块名称，例如 bug |
-| `id` | 是 | 对象 ID |
+| `args...` | 否 | 对象 ID（按操作要求）和其他参数 |
 
 | 选项 | 说明 |
 | --- | --- |
@@ -853,6 +853,7 @@ zentao get [options] <module> <id>
 ```bash
 zentao get bug 42
 zentao get product 1 --pick=id,name
+zentao get resourcecalendar --type=person --projectID=1
 ```
 
 <a id="command-create"></a>
@@ -8088,7 +8089,7 @@ zentao my auditPlans [选项]
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--browseType` | 查询 | `string` | 否 | `"myChecking"` | 待处理筛选类型，默认 myChecking，取值不区分大小写<br>可选值：mychecking（待我检查）；checked（已检查）；wait（未检查）；checking（检查中）；assignto（指派给我）；delay（已延期）；iscycle（周期性计划）；all（全部） |
+| `--browseType` | 查询 | `string` | 否 | `"mychecking"` | 待处理筛选类型，默认 mychecking，取值不区分大小写<br>可选值：mychecking（待我检查）；checked（已检查）；wait（未检查）；checking（检查中）；assignto（指派给我）；delay（已延期）；iscycle（周期性计划）；all（全部） |
 | `--orderBy` | 查询 | `string` | 否 | 未声明 | 排序字段。 |
 | `--recPerPage` | 查询 | `number` | 否 | 未声明 | 每页数量，不超过1000 |
 | `--pageID` | 查询 | `number` | 否 | 未声明 | 页码，从第1页开始<br>也可使用 --page |
@@ -9248,7 +9249,7 @@ zentao workflowgroup list [选项]
 快捷用法与字段查询：
 
 ```text
-zentao resourcecalendar <id>
+zentao resourcecalendar get [查询参数]
 zentao resourcecalendar props --format=json
 zentao help resourcecalendar
 ```

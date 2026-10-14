@@ -66,9 +66,11 @@ test('read-only handlers enforce the action subset even without input schema val
     const callbacks = new Map<string, Handler>();
     const server = { registerTool(name: string, _config: unknown, handler: Handler) { callbacks.set(name, handler); } } as unknown as McpServer;
     const auth = { async getContext(): Promise<never> { authenticated = true; throw new Error('Unexpected authentication'); } };
-    registerModuleTools(server, auth, { readOnly: true, modules: ['product'], splitTools: true });
-    const result = await callbacks.get('zentao_product_read')!({ action: 'update', id: 1 }, { signal: new AbortController().signal });
-    expect(result).toMatchObject({ isError: true, structuredContent: { error: { code: 'E2006' } } });
+    registerModuleTools(server, auth, { readOnly: true, modules: ['product', 'repo', 'my', 'relation'], splitTools: true });
+    for (const [module, action] of [['product', 'update'], ['repo', 'create'], ['my', 'createSSH'], ['relation', 'unlink']]) {
+        const result = await callbacks.get(`zentao_${module}_read`)!({ action, id: 1 }, { signal: new AbortController().signal });
+        expect(result).toMatchObject({ isError: true, structuredContent: { error: { code: 'E2006' } } });
+    }
     expect(authenticated).toBe(false);
     expect(() => registerModuleTools(server, auth, { modules: ['unknown'] })).toThrow('未找到指定的模块 unknown');
     expect(() => registerModuleTools(server, auth, { modules: [] })).toThrow('至少指定一个模块');

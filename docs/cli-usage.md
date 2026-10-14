@@ -244,9 +244,9 @@ zentao mcp --transport http --port 9091 --url https://zentao-b.example.com
 
 `--read-only` 只开放查询工具，并在执行入口校验允许的动作；stdio 账号切换工具也不注册。`--modules product,story,task` 只注册指定业务模块，未知或空模块名会报错。`--split-tools` 按模块拆为 `_read` / `_write`，例如 `zentao_task_read` 和 `zentao_task_write`，不存在对应动作的分组不注册；默认使用 `zentao_task` 等工具名。三个选项可以组合使用，开放范围在进程启动时固定；禅道仍按账号权限授权。
 
-业务参数使用 `params` 中的正式名称，例如任务列表 `{"action":"list","params":{"executionID":3}}`。`id`、`product`、`project`、`execution` 是按动作定义映射的兼容简写，与正式参数冲突时会报错。请求体直接使用 JSON 对象；MCP 不读取 CLI 管道或 `@-` 输入。
+业务参数使用 `params` 中的正式名称，例如任务列表 `{"action":"list","params":{"executionID":3}}`。`id`、`product`、`project`、`execution` 是按动作定义映射的数字 ID 简写，与正式参数冲突时会报错。数组字段不使用数字简写，例如创建代码库用 `{"action":"create","params":{"space":10,"product":[12,13],"name":"demo_repo"}}`。请求体直接使用 JSON 对象；MCP 不读取 CLI 管道或 `@-` 输入。
 
-MCP 发送请求前按动作定义检查必填字段、JSON 类型、明确枚举和未知参数。路径 ID 使用非负整数，`page` 从 1 开始，`recPerPage` 范围为 1–1000；业务字段仍按自身定义处理，例如预计工时允许小数、根模块允许 0。更新时可由详情自动补齐的请求体字段允许省略。
+MCP 发送请求前按动作定义检查必填字段、JSON 类型、明确枚举和未知参数，以及已声明的整数、数值范围、字符串长度/格式、数组长度和元素类型。路径 ID 使用非负整数，`page` 从 1 开始，`recPerPage` 范围为 1–1000；业务字段仍按自身定义处理，例如预计工时允许小数、根模块允许 0。更新时可由详情自动补齐的请求体字段允许省略。权限和字段间业务规则由服务端校验。
 
 所有工具都声明 `outputSchema`，成功时通过 `structuredContent.data` 返回数据；列表还包含 `pager` 和 `meta`。文本结果保留原有 JSON 形态（列表带 `data`，详情直接返回对象）。业务错误设置 `isError=true` 并返回 `structuredContent.error`，包含 `code`、`message` 及适用的 `module`、`action`；协议和顶层 schema 校验错误由 MCP SDK 返回。
 
@@ -306,7 +306,7 @@ zentao doc createMyDoc --help
 第一种：**原始方式**，通过如下 `ls`、`get` 等命令访问和操作禅道数据，具体包括：
 
 * `zentao ls`：获取对象列表
-* `zentao get <moduleName> <objectID>`：获取单个对象
+* `zentao get <moduleName> [objectID]`：详情或查询，仅在操作声明路径 ID 时必填
 * `zentao delete <moduleName> <objectID>`：删除对象
 * `zentao create <moduleName> [params]`：创建对象
 * `zentao update <moduleName> <objectID> [params]`：更新对象
@@ -428,7 +428,7 @@ $ zentao product 1
 <details>
 <summary>原始方式</summary>
 
-通过 `zentao get <moduleName> <objectID>` 获取指定模块、指定 ID 的对象信息。
+通过 `zentao get <moduleName> <objectID>` 获取指定模块、指定 ID 的对象信息。没有路径 ID 的查询可省略 ID，例如 `zentao get resourcecalendar --type=person --projectID=1`，等同于 `zentao resourcecalendar get --type=person --projectID=1`。
 
 ```bash
 # 获取禅道产品 #1 信息
