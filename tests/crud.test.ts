@@ -23,6 +23,8 @@ describe('CLI command entry points', () => {
                 const path = url.pathname.replace('/api.php/v2', '');
                 requests.push({ method: request.method, path, query: Object.fromEntries(url.searchParams),
                     ...(request.method === 'POST' ? { body: await request.json() } : {}) });
+                if (path.endsWith('/deliverable-options')) return Response.json({ deliverables: { 3: '开发说明', 8: '验收报告' } });
+                if (path.endsWith('/deliverables')) return Response.json({ deliverables: [{ id: 7, name: '开发说明' }], pager: { pageID: 2, recPerPage: 10, recTotal: 21 } });
                 return Response.json({
                     status: 'success',
                     product: { id: Number(path.split('/').at(-1)), name: 'Product' },
@@ -135,6 +137,55 @@ describe('CLI command entry points', () => {
         const query = { sql: 'SELECT id, account FROM zt_user', page: 1, limit: 20, count: false };
         expect((await run(['db', 'query', '--params', JSON.stringify(query)])).exitCode).toBe(0);
         expect(requests[1]).toMatchObject({ method: 'POST', path: '/db/query', body: query });
+    });
+
+    test('deliverable options remain an object and submitted deliverables retain their pager', async () => {
+        const options = await run(['deliverable', 'options', '--projectID=2']);
+        expect(options.exitCode).toBe(0);
+        expect(JSON.parse(options.stdout)).toEqual({ 3: '开发说明', 8: '验收报告' });
+        expect(requests[0]).toEqual({ method: 'GET', path: '/projects/2/deliverable-options', query: {} });
+        const list = await run(['deliverable', 'list', '--projectID=2', '--browseType=reviewing', '--page=2', '--recPerPage=10']);
+        expect(list.exitCode).toBe(0);
+        expect(JSON.parse(list.stdout)).toMatchObject({ data: [{ id: 7, name: '开发说明' }], pager: { page: 2, recPerPage: 10, total: 21 } });
+        expect(requests[1]).toMatchObject({ path: '/projects/2/deliverables', query: { browseType: 'reviewing', pageID: '2', recPerPage: '10' } });
+    });
+
+    test('relation unlink uses a relation record ID through each CLI entry point', async () => {
+        for (const args of [
+            ['relation', 'unlink', '--relationID=8'],
+            ['relation', 'unlink', '8'],
+            ['do', 'relation', 'unlink', '--id=8'],
+        ]) {
+            const result = await run([...args, '--yes']);
+            expect(result.exitCode, result.stderr).toBe(0);
+            expect(requests.at(-1)).toEqual({ method: 'DELETE', path: '/relations/8', query: {} });
+        }
+        expect(requests).toHaveLength(3);
+    });
+
+    test('relation unlink rejects legacy object selectors even when an ID could be resolved', async () => {
+        const legacy = { objectType: 'story', objectID: 42, relatedObjectType: 'bug', relatedObjectID: 43, relationName: 'related' };
+        for (const args of [
+            ['42', ...Object.entries(legacy).map(([key, value]) => `--${key}=${value}`)],
+            ['--id=42', '--params', JSON.stringify(legacy)],
+            ['--relationID=8', '--objectID=42'],
+            Object.entries(legacy).map(([key, value]) => `--${key}=${value}`),
+        ]) {
+            const result = await run(['relation', 'unlink', ...args, '--yes']);
+            expect(result.exitCode, args.join(' ')).toBe(1);
+            expect(JSON.parse(result.stderr).error).toMatchObject({ code: '2009', message: expect.stringContaining('relationID') });
+        }
+        expect(requests).toEqual([]);
+    });
+
+    test('relation unlink still requires a relation ID and explicit deletion confirmation', async () => {
+        const missingID = await run(['relation', 'unlink', '--yes']);
+        expect(missingID.exitCode).toBe(1);
+        expect(JSON.parse(missingID.stderr).error.code).toBe('2003');
+        const unconfirmed = await run(['relation', 'unlink', '--relationID=8']);
+        expect(unconfirmed.exitCode).toBe(1);
+        expect(JSON.parse(unconfirmed.stderr).error.message).toContain('--yes');
+        expect(requests).toEqual([]);
     });
 
     test('ls refuses unsupported automatic pagination before requesting a page', async () => {

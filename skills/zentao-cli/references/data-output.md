@@ -34,6 +34,18 @@ zentao db query --params '{"sql":"SELECT id, account FROM zt_user","page":1,"lim
 
 仅在用户要求并具备 SQL 查询权限时使用。省略总数后不要把当前页行数当作全量统计；MCP 只读模式按 HTTP 方法筛选，会隐藏这个 POST 查询操作。
 
+## 交付物候选与已提交记录
+
+选择可提交的交付物定义时查询 `options`；查看已提交记录时查询 `list`。示例项目 ID 需替换为实际值：
+
+```bash
+zentao deliverable options --projectID=2 --format=json
+zentao deliverable list --projectID=2 --browseType=normal --page=1 --recPerPage=20 --format=json
+zentao deliverable list --projectID=2 --browseType=reviewing --format=json
+```
+
+`options` 直接返回定义 ID 到名称的对象，如 `{"3":"开发说明"}`，无 `data` 包装和分页，不能套用列表遍历方式。`list` 返回 `data` 数组及 `pager`，默认 `normal` 表示已提交；`wait` 为未提交，`mine` 为我提交，`pending` 为待评审，`submitbyme` 为由我发起。交付物详情的 `docInfo` 是字符串，不按数组遍历。
+
 ## 当前页的数据处理
 
 范围参数及接口声明的 `browseType` 等控制服务端查询；`--filter`、`--search`、`--sort`、`--limit`、`--pick` 在收到当前页后处理，不能扩大服务器已返回的集合。

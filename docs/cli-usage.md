@@ -256,9 +256,13 @@ MCP 发送请求前按动作定义检查必填字段、JSON 类型、明确枚�
 
 ### API 覆盖与版本兼容
 
-CLI 使用 `zentao-api 0.8.0` 的注册表，提供 42 个模块、360 个操作，覆盖问题（`issue`）、风险（`risk`）、会议（`meeting`）、工作流（`workflow`）、文档（`doc`）、待办（`todo`）、地盘（`my`）和代码库（`repo`）等模块，并支持项目集/项目/执行下的关联列表、需求层级、附件上传和 Markdown 文档正文。
+CLI 使用 `zentao-api 0.8.1` 的注册表，提供 42 个模块、361 个操作，覆盖问题（`issue`）、风险（`risk`）、会议（`meeting`）、工作流（`workflow`）、文档（`doc`）、待办（`todo`）、地盘（`my`）和代码库（`repo`）等模块，并支持项目集/项目/执行下的关联列表、需求层级、附件上传和 Markdown 文档正文。
 
 SDK 0.8.0 按禅道 22.7 调整了地盘（`my`）列表的 `browseType` 默认值和可选值，例如任务与 Bug 默认 `assignedTo`（区分大小写），项目默认 `doing`。依赖旧筛选范围的脚本应查看对应操作的 `--help`，显式传入受支持的值。
+
+SDK 0.8.1 的解除关联改为 `zentao relation unlink --relationID=8 --yes`，请求 `DELETE /relations/8`。从 `relation list` 的结果中选择 `relationType=custom` 的关系，读取其 `relationID`；这个值是关系记录 ID，不是关联对象 ID 或 `relationKey`。此动作的位置 ID / `--id` 也改为表示 `relationID`。旧的 `objectType`、`objectID`、`relatedObjectType`、`relatedObjectID`、`relationName` 参数会被拒绝，脚本需显式迁移。
+
+新增 `zentao deliverable options --projectID=2 --format=json`，返回可提交的交付物定义 ID 到名称的映射对象，不分页；已提交交付物仍通过 `deliverable list` 查询分页数组。列表新增 `wait`（未提交）、`mine`（我提交）、`reviewing`（评审中）筛选；`normal` 默认值表示已提交，`pending` 表示待评审，`submitbyme` 表示由我发起。详情中的 `docInfo` 按字符串处理。地盘十个搜索接口的 `param` 和待办的 `status` 参数继续保留。
 
 每个操作都带有最低禅道版本要求。常见版本基线如下，具体以操作帮助为准：
 

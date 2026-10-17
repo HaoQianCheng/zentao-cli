@@ -341,7 +341,7 @@ bun run scripts/generate-command-reference.ts --check
 
 ## 覆盖范围
 
-对应当前工作区：CLI **0.3.1**，API 定义 **0.8.0**；覆盖 **17 个内置一级命令**（另含 config get/set）、**42 个业务模块、360 个业务操作**。已安装版本不同时，请以本机命令的 --help 为准。
+对应当前工作区：CLI **0.3.1**，API 定义 **0.8.1**；覆盖 **17 个内置一级命令**（另含 config get/set）、**42 个业务模块、361 个业务操作**。已安装版本不同时，请以本机命令的 --help 为准。
 
 <a id="global-options"></a>
 
@@ -1038,7 +1038,7 @@ zentao upgrade --yes
 | [auditplan](#module-auditplan) | 质量保证计划 | — | 7 |
 | [nc](#module-nc) | 不符合项 | — | 6 |
 | [opportunity](#module-opportunity) | 机会 | — | 6 |
-| [deliverable](#module-deliverable) | 交付物 | — | 4 |
+| [deliverable](#module-deliverable) | 交付物 | — | 5 |
 | [baseline](#module-baseline) | 基线 | — | 5 |
 | [change](#module-change) | 项目变更 | — | 5 |
 | [relation](#module-relation) | 对象关联 | — | 4 |
@@ -8738,7 +8738,7 @@ zentao opportunity delete --opportunityID=<number> [选项]
 
 ### deliverable · 交付物
 
-交付物管理，支持获取交付物列表，支持获取项目下的交付物、新增项目交付物、获取交付物详情、删除项目交付物
+交付物管理，支持获取交付物列表，支持获取项目下的交付物、获取项目可选交付物列表、新增项目交付物、获取交付物详情、删除项目交付物
 
 快捷用法与字段查询：
 
@@ -8752,6 +8752,7 @@ zentao help deliverable
 | 操作 | 用途 |
 | --- | --- |
 | [list](#action-deliverable-list) | 获取交付物列表，支持获取项目下的交付物 |
+| [options](#action-deliverable-options) | 获取项目可选交付物列表 |
 | [create](#action-deliverable-create) | 新增项目交付物 |
 | [get](#action-deliverable-get) | 获取交付物详情 |
 | [delete](#action-deliverable-delete) | 删除项目交付物 |
@@ -8769,7 +8770,7 @@ zentao deliverable list --projectID=<number> [选项]
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
 | `--projectID` | 路径 | `number` | 是 | 未声明 | 所属项目ID |
-| `--browseType` | 查询 | `string` | 否 | `"normal"` | 交付物筛选类型，默认 normal<br>可选值：normal（全部）；pending（待提交）；pendingme（待我评审）；submitbyme（我提交的）；reviewedbyme（我评审过的）；pass（已通过）；fail（未通过）；bymodule（按模块）；bysearch（搜索） |
+| `--browseType` | 查询 | `string` | 否 | `"normal"` | 交付物筛选类型，默认 normal<br>可选值：normal（已提交）；wait（未提交）；mine（我提交）；submitbyme（由我发起）；pending（待评审）；pendingme（待我评审）；reviewing（评审中）；reviewedbyme（我评审过）；pass（评审通过）；fail（评审失败）；bymodule（按模块）；bysearch（搜索） |
 | `--param` | 查询 | `string` | 否 | 未声明 | browseType 为 bymodule 时传模块 ID，为 bysearch 时传已保存查询 ID。 |
 | `--orderBy` | 查询 | `string` | 否 | `"id_desc"` | 排序字段，默认 id_desc。 |
 | `--recPerPage` | 查询 | `number` | 否 | `"20"` | 每页数量，默认 20。 |
@@ -8778,6 +8779,26 @@ zentao deliverable list --projectID=<number> [选项]
 `--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`、`--filter`、`--sort`、`--search`、`--search-fields`、`--limit`、`--page`；其他全局选项见[全局选项](#global-options)。
+
+<a id="action-deliverable-options"></a>
+
+#### `zentao deliverable options` · 获取项目可选交付物列表
+
+最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
+
+获取当前项目流程下可以提交的交付物定义。返回结果中 deliverables 的属性名为交付物定义 ID，值为交付物名称，可用于创建项目交付物。
+
+```text
+zentao deliverable options --projectID=<number> [选项]
+```
+
+| 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
+| --- | --- | --- | --- | --- | --- |
+| `--projectID` | 路径 | `number` | 是 | 未声明 | 项目ID |
+
+`--projectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+
+可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--pick`；其他全局选项见[全局选项](#global-options)。
 
 <a id="action-deliverable-create"></a>
 
@@ -9100,7 +9121,7 @@ zentao change delete --changeID=<number> [选项]
 
 ### relation · 对象关联
 
-对象关联管理，支持关联对象、查询可关联对象、查询关联对象、删除关联对象
+对象关联管理，支持关联对象、查询可关联对象、查询关联对象、删除关联关系
 
 快捷用法与字段查询：
 
@@ -9115,7 +9136,7 @@ zentao help relation
 | [link](#action-relation-link) | 关联对象 |
 | [candidates](#action-relation-candidates) | 查询可关联对象 |
 | [list](#action-relation-list) | 查询关联对象 |
-| [unlink](#action-relation-unlink) | 删除关联对象 |
+| [unlink](#action-relation-unlink) | 删除关联关系 |
 
 <a id="action-relation-link"></a>
 
@@ -9183,23 +9204,21 @@ zentao relation list --objectType=<string> --objectID=<number> [选项]
 
 <a id="action-relation-unlink"></a>
 
-#### `zentao relation unlink` · 删除关联对象
+#### `zentao relation unlink` · 删除关联关系
 
 最低禅道版本：`22.7` / `biz13.7` / `max8.7` / `ipd5.7`。
 
+根据关系记录 ID 删除自定义关联关系。relationID 从查询关联对象接口返回的 relations[].relationID 字段获取，只有 relationType 为 custom 的自定义关系可以删除。
+
 ```text
-zentao relation unlink --objectType=<string> --objectID=<number> --relatedObjectType=<string> --relatedObjectID=<number> --relationName=<string> [选项]
+zentao relation unlink --relationID=<number> [选项]
 ```
 
 | 参数 | 位置 | 类型 | 必填 | 默认值 | 说明与可选值 |
 | --- | --- | --- | --- | --- | --- |
-| `--objectType` | 路径 | `string` | 是 | 未声明 | objectType |
-| `--objectID` | 路径 | `number` | 是 | 未声明 | objectID |
-| `--relatedObjectType` | 路径 | `string` | 是 | 未声明 | relatedObjectType |
-| `--relatedObjectID` | 路径 | `number` | 是 | 未声明 | relatedObjectID |
-| `--relationName` | 路径 | `string` | 是 | 未声明 | relationName |
+| `--relationID` | 路径 | `number` | 是 | 未声明 | relationID |
 
-`--objectID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
+`--relationID` 可用 `--id` 或首个数字位置参数代替；其余路径 ID 需分别提供。
 
 可配合[公共选项](#data-options)：`--params`、`--format`、`--silent`、`--yes`、`--batch-fail-fast`；其他全局选项见[全局选项](#global-options)。
 

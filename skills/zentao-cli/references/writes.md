@@ -63,15 +63,17 @@ zentao my createSSH --data '{"name":"developer","publicKey":"ssh-ed25519 <完整
 
 GitFox 负责公钥完整性及重复检查。该操作修改当前 Token 用户的密钥，不是查询；MCP 只读模式会拒绝执行。
 
-对象关联有多个路径参数，先查已有关系或候选对象；解除关联时按实际结果填写关系名与两个对象 ID：
+先查已有关系或候选对象。解除关联时选择用户授权删除且 `relationType=custom` 的关系，读取该条记录的 `relationID`；下方 `8` 是关系记录 ID 示例：
 
 ```bash
 zentao relation list --objectType=story --objectID=42 --format=json
 zentao relation candidates --objectType=story --objectID=42 --relatedObjectType=bug --format=json
-zentao relation unlink --objectType=story --objectID=42 --relatedObjectType=bug --relatedObjectID=43 --relationName='<实际关系名>' --yes
+zentao relation unlink --relationID=8 --yes
 ```
 
-`--id` 只能替代 `objectID`，不能代替 `relatedObjectID`。SDK 0.8.0 的 `relation link` 将 `relation` 声明为数组，但说明和请求示例使用对象映射；在上游契约统一前，不据此拼接新增关联请求。
+SDK 0.8.1 起，`relation unlink` 只使用关系记录 `relationID`，不能用关联对象 ID 或 `relationKey` 代替。此动作的位置 ID / `--id` 也表示 `relationID`；旧的五个路径参数已停用，脚本需要迁移。查询关联与候选对象仍使用 `objectType`、`objectID` 等参数。
+
+当前 SDK 的 `relation link` 将 `relation` 声明为数组，但说明和请求示例使用对象映射；在上游契约统一前，不据此拼接新增关联请求。
 
 ## 常用状态操作
 

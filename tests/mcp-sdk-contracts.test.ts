@@ -2,7 +2,7 @@ import { expect, test } from 'bun:test';
 import { getModuleActionParams } from 'zentao-api';
 import { getAction, getModule } from '../src/modules/helper.js';
 import { normalizeToolParams } from '../src/mcp/params.js';
-import { createMcpTestClient } from './mcp-helpers.js';
+import { createMcpTestClient, toolData } from './mcp-helpers.js';
 
 test('MCP scope shortcuts never replace array fields', async () => {
     let requests = 0;
@@ -51,7 +51,7 @@ test('MCP validates SDK body constraints before authentication, including JSON d
     }
 });
 
-test('new SDK requests preserve numeric arrays, public keys, multiple IDs, autofill and false', async () => {
+test('SDK requests preserve numeric arrays, public keys, relation IDs, autofill and false', async () => {
     const requests: Array<{ method: string; path: string; body?: unknown }> = [];
     const mcp = await createMcpTestClient(async req => {
         const url = new URL(req.url);
@@ -65,7 +65,7 @@ test('new SDK requests preserve numeric arrays, public keys, multiple IDs, autof
         for (const [name, args] of [
             ['repo', { action: 'create', params: { data: { space: 10, product: [12, 13], name: 'demo_repo', acl: 'private', members: ['developer'] } } }],
             ['my', { action: 'createSSH', params: { name: 'coder', publicKey } }],
-            ['relation', { action: 'unlink', id: 42, params: { objectType: 'story', relatedObjectType: 'bug', relatedObjectID: 43, relationName: 'related' } }],
+            ['relation', { action: 'unlink', id: 8 }],
             ['workflow', { action: 'updateFlow', id: 5, params: { name: 'Renamed' } }],
             ['db', { action: 'query', params: { sql: 'SELECT id FROM zt_user', count: false } }],
         ] as const) {
@@ -75,11 +75,95 @@ test('new SDK requests preserve numeric arrays, public keys, multiple IDs, autof
         expect(requests).toEqual([
             { method: 'POST', path: '/repos', body: { space: 10, product: [12, 13], name: 'demo_repo', acl: 'private', members: ['developer'], desc: '' } },
             { method: 'POST', path: '/my/sshkeys', body: { name: 'coder', publicKey } },
-            { method: 'DELETE', path: '/relations/story/42/bug/43/related' },
+            { method: 'DELETE', path: '/relations/8' },
             { method: 'GET', path: '/workflows/5' },
             { method: 'PUT', path: '/workflows/5', body: { name: 'Renamed', navigator: 'primary', position: 'after', positionModule: 'main' } },
             { method: 'POST', path: '/db/query', body: { sql: 'SELECT id FROM zt_user', count: false } },
         ]);
+    } finally {
+        await mcp.close();
+    }
+});
+
+test('MCP unlinks by the returned relation ID and rejects legacy selectors before HTTP', async () => {
+    const requests: Array<{ method: string; path: string }> = [];
+    const relation = { id: 43, relationID: 8, relationKey: 'related', relationType: 'custom' };
+    let calls = 0;
+    const mcp = await createMcpTestClient(req => {
+        calls++;
+        const url = new URL(req.url);
+        if (url.searchParams.get('mode') === 'getconfig') return Response.json({ version: '22.7' });
+        requests.push({ method: req.method, path: url.pathname.replace('/api.php/v2', '') });
+        return Response.json({ status: 'success', relations: [relation] });
+    });
+    try {
+        const legacy = { objectType: 'story', objectID: 42, relatedObjectType: 'bug', relatedObjectID: 43, relationName: 'related' };
+        for (const args of [{ params: legacy }, { id: 42, params: legacy }, { params: { relationID: 8, objectID: 42 } }]) {
+            expect(await mcp.client.callTool({ name: 'zentao_relation', arguments: { action: 'unlink', ...args } }))
+                .toMatchObject({ isError: true, structuredContent: { error: { code: 'E2009' } } });
+        }
+        expect(calls).toBe(0);
+        const listed = await mcp.client.callTool({ name: 'zentao_relation', arguments: { action: 'list', id: 42, params: { objectType: 'story' } } });
+        expect(listed.isError).not.toBe(true);
+        expect(toolData(listed).data).toEqual([relation]);
+        const unlinked = await mcp.client.callTool({ name: 'zentao_relation', arguments: { action: 'unlink', params: { relationID: toolData(listed).data[0].relationID } } });
+        expect(unlinked.isError).not.toBe(true);
+        expect(requests).toEqual([{ method: 'GET', path: '/relations/story/42' }, { method: 'DELETE', path: '/relations/8' }]);
+    } finally {
+        await mcp.close();
+    }
+});
+
+test('read-only MCP preserves deliverable option maps, new filters and detail strings', async () => {
+    const requests: Array<{ path: string; query: Record<string, string> }> = [];
+    const options = { 3: '开发说明', 8: '验收报告' };
+    const deliverable = { id: 7, name: '开发说明', docInfo: '交付文档说明' };
+    const mcp = await createMcpTestClient(req => {
+        const url = new URL(req.url);
+        if (url.searchParams.get('mode') === 'getconfig') return Response.json({ version: '22.7' });
+        requests.push({ path: url.pathname.replace('/api.php/v2', ''), query: Object.fromEntries(url.searchParams) });
+        if (url.pathname.endsWith('/deliverable-options')) return Response.json({ deliverables: options });
+        if (url.pathname.endsWith('/deliverables/7')) return Response.json({ deliverable });
+        return Response.json({ deliverables: [deliverable], pager: { pageID: 2, recPerPage: 10, recTotal: 21 } });
+    }, ['--read-only', '--modules', 'deliverable']);
+    try {
+        const selected = await mcp.client.callTool({ name: 'zentao_deliverable', arguments: { action: 'options', project: 2 } });
+        expect(selected.isError).not.toBe(true);
+        expect(selected.structuredContent).toEqual({ data: options });
+        expect(requests[0]).toEqual({ path: '/projects/2/deliverable-options', query: {} });
+        for (const browseType of ['normal', 'wait', 'mine', 'reviewing', 'pending', 'submitbyme']) {
+            const listed = await mcp.client.callTool({ name: 'zentao_deliverable', arguments: { action: 'list', project: 2, params: { browseType }, page: 2, recPerPage: 10 } });
+            expect(listed.isError, browseType).not.toBe(true);
+            expect(listed.structuredContent).toMatchObject({ data: [deliverable], pager: { pageID: 2, recPerPage: 10, recTotal: 21 } });
+            expect(requests.at(-1)).toMatchObject({ path: '/projects/2/deliverables', query: { browseType, pageID: '2', recPerPage: '10' } });
+        }
+        const detail = await mcp.client.callTool({ name: 'zentao_deliverable', arguments: { action: 'get', id: 7 } });
+        expect(detail.structuredContent).toEqual({ data: deliverable });
+    } finally {
+        await mcp.close();
+    }
+});
+
+test('MCP keeps all personal search parameters and unfinished todo status after the SDK update', async () => {
+    const requests: Array<{ path: string; query: Record<string, string> }> = [];
+    const searchActions = ['bugs', 'epics', 'issues', 'requirements', 'reviewIssues', 'risks', 'stories', 'tasks', 'testcases', 'testtasks'];
+    const mcp = await createMcpTestClient(req => {
+        const url = new URL(req.url);
+        if (url.searchParams.get('mode') === 'getconfig') return Response.json({ version: '22.7' });
+        requests.push({ path: url.pathname.replace('/api.php/v2', ''), query: Object.fromEntries(url.searchParams) });
+        return Response.json(Object.fromEntries([...searchActions, 'todos'].map(name => [name.toLowerCase(), []])));
+    }, ['--read-only', '--modules', 'my']);
+    try {
+        for (const action of searchActions) {
+            const browseType = action === 'testtasks' ? 'bySearch' : 'bysearch';
+            const result = await mcp.client.callTool({ name: 'zentao_my', arguments: { action, params: { browseType, param: '12' } } });
+            expect(result.isError, action).not.toBe(true);
+            expect(requests.at(-1)).toMatchObject({ path: `/my/${action.toLowerCase()}`, query: { browseType, param: '12' } });
+        }
+        const todos = await mcp.client.callTool({ name: 'zentao_my', arguments: { action: 'todos', params: { browseType: 'undone', status: 'undone' } } });
+        expect(todos.isError).not.toBe(true);
+        expect(requests.at(-1)).toMatchObject({ path: '/my/todos', query: { browseType: 'undone', status: 'undone' } });
+        expect(requests).toHaveLength(11);
     } finally {
         await mcp.close();
     }

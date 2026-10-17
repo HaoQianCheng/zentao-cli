@@ -63,6 +63,16 @@ export async function executeModuleCommand(
     }
 
     const params = resolvedParams ? { ...resolvedParams } : buildParams(options, actionName, args);
+    if (module.name === 'relation' && action.name === 'unlink') {
+        // Old object selectors plus an ID alias could otherwise delete an unrelated relation.
+        const legacy = ['objectType', 'objectID', 'relatedObjectType', 'relatedObjectID', 'relationName'].filter(name => Object.hasOwn(params, name));
+        if (legacy.length) {
+            throw new ZentaoError('E2009', {
+                option: legacy.join(', '),
+                reason: '解除关联已改用关系记录 relationID，请从 relation list 的返回结果获取，不能用对象 ID 或 relationKey 代替',
+            });
+        }
+    }
     if (module.name === 'bug' && action.name === 'create' && params.product !== undefined) {
         if (params.productID !== undefined && Number(params.product) !== Number(params.productID)) {
             throw new ZentaoError('E2009', {
